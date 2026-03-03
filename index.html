@@ -58,91 +58,74 @@ body {
   display: none;
 }
 
-/* Collage Section */
+/* Full‑screen pyramid grid layout */
 .collage {
   display: grid;
-  grid-template-rows: repeat(5, 1fr);
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
   width: 100%;
-  height: 100vh; /* Full screen */
+  height: 100vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 12% 18% 30% 18% 12%;
+  gap: 5px;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 5px;
 }
 
-/* Pyramid placement using grid */
+/* Place photos in pyramid positions */
 .collage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
 }
 
-/* Specific photo placement */
+/* Row assignments */
 .photo1 { grid-column: 1 / span 2; grid-row: 1; }
-.photo2 { grid-column: 1; grid-row: 2; }
-.photo3 { grid-column: 2; grid-row: 2; }
-.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* center large */
-.photo4 { grid-column: 1; grid-row: 4; }
-.photo5 { grid-column: 2; grid-row: 4; }
+.photo2 { grid-column: 1 / 2;        grid-row: 2; }
+.photo3 { grid-column: 2 / 3;        grid-row: 2; }
+.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* big center */
+.photo4 { grid-column: 1 / 2;        grid-row: 4; }
+.photo5 { grid-column: 2 / 3;        grid-row: 4; }
 .photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
 /* Letter below collage */
 .letter {
-  display: block;
   max-width: 900px;
   margin: 20px auto 80px auto;
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
   font-weight: 600;
-  line-height: 1.8;
+  line-height: 1.7;
   color: #1b4332;
-  padding: 25px;
+  padding: 22px;
   background: linear-gradient(135deg, #c8f7c5, #56ab2f);
-  border-radius: 16px;
+  border-radius: 14px;
   text-align: center;
-  z-index: 1;
 }
 
-/* Frogs */
+/* Frogs falling from top of *screen* */
 .frog {
   position: fixed;
-  width: 30px;
-  height: 30px;
-  background-image: url('https://i.imgur.com/gXaNddC.png');
-  background-size: contain;
-  background-repeat: no-repeat;
+  width: 32px;
+  height: 32px;
+  background: url('https://i.imgur.com/gXaNddC.png') center/contain no-repeat;
   pointer-events: none;
-  z-index: 30;
+  z-index: 20;
 }
 
-/* Leaves */
+/* Leaves falling from top of *screen* */
 .leaf {
   position: fixed;
-  width: 25px;
-  height: 25px;
-  background-image: url('https://i.imgur.com/46e8VzS.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.7;
+  width: 24px;
+  height: 24px;
+  background: url('https://i.imgur.com/46e8VzS.png') center/contain no-repeat;
   pointer-events: none;
-  z-index: 28;
-}
-
-/* Mobile adjustments */
-@media (max-width: 600px) {
-  .collage {
-    grid-template-rows: repeat(7, 1fr);
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 5px;
-  }
-  .photo1, .photo7, .photo6 { grid-column: 1; }
-  .photo2, .photo3, .photo4, .photo5 { grid-column: 1; }
+  opacity: 0.8;
+  z-index: 18;
 }
 </style>
 </head>
+
 <body>
 
 <div id="startScreen">
@@ -182,11 +165,10 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Frogs falling from top of the viewport */
+/* Frogs falling from top of screen */
 function createFrogs() {
-  const frogCount = window.innerWidth < 600 ? 20 : 50;
-
-  for (let i = 0; i < frogCount; i++) {
+  const count = window.innerWidth < 600 ? 25 : 60;
+  for (let i = 0; i < count; i++) {
     spawnFrog(Math.random() * window.innerWidth, -50);
   }
 
@@ -195,48 +177,43 @@ function createFrogs() {
     frog.classList.add("frog");
     frog.x = x;
     frog.y = y;
-    frog.vx = (Math.random() - 0.5) * 1.5;
-    frog.vy = 1 + Math.random() * 2;
-    frog.rotation = Math.random() * 360;
-    frog.spinSpeed = (Math.random() - 0.5) * 5;
+    frog.vy = 1 + Math.random() * 1.8;
+    frog.vx = (Math.random() - 0.5) * 1.2;
     document.body.appendChild(frog);
 
     function animate() {
-      frog.x += frog.vx;
       frog.y += frog.vy;
-      frog.rotation += frog.spinSpeed;
-      frog.style.transform = `translate(${frog.x}px, ${frog.y}px) rotate(${frog.rotation}deg)`;
+      frog.x += frog.vx;
+      frog.style.transform = `translate(${frog.x}px, ${frog.y}px)`;
 
-      if (frog.y < window.innerHeight + 50) requestAnimationFrame(animate);
+      if (frog.y < window.innerHeight + 40) {
+        requestAnimationFrame(animate);
+      }
     }
-
     animate();
   }
 }
 
-/* Leaves falling from top of viewport */
+/* Leaves falling from top of screen */
 function createLeaves() {
-  const leafCount = window.innerWidth < 600 ? 10 : 15;
-
-  for (let i = 0; i < leafCount; i++) {
+  const count = window.innerWidth < 600 ? 12 : 18;
+  for (let i = 0; i < count; i++) {
     const leaf = document.createElement("div");
     leaf.classList.add("leaf");
     leaf.x = Math.random() * window.innerWidth;
-    leaf.y = -20;
-    leaf.speed = 0.3 + Math.random();
+    leaf.y = -30;
+    leaf.speed = 0.4 + Math.random() * 0.8;
     document.body.appendChild(leaf);
 
     function animateLeaf() {
       leaf.y += leaf.speed;
-      leaf.x += Math.sin(leaf.y * 0.01);
-      if (leaf.y > window.innerHeight + 20) {
-        leaf.y = -20;
-        leaf.x = Math.random() * window.innerWidth;
-      }
+      leaf.x += Math.sin(leaf.y * .01) * 1.2;
       leaf.style.transform = `translate(${leaf.x}px, ${leaf.y}px)`;
-      requestAnimationFrame(animateLeaf);
-    }
 
+      if (leaf.y < window.innerHeight + 30) {
+        requestAnimationFrame(animateLeaf);
+      }
+    }
     animateLeaf();
   }
 }
