@@ -60,33 +60,36 @@ body {
 
 /* Collage Section */
 .collage {
-  position: relative;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   width: 100%;
-  min-height: 100vh;
-  overflow: hidden;
+  height: 100vh; /* Full screen */
+  box-sizing: border-box;
+  padding: 10px;
 }
 
-/* Pyramid layout with slight overlap */
+/* Pyramid placement using grid */
 .collage img {
-  position: absolute;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  transition: transform 0.3s ease;
 }
 
-/* Pyramid positions */
-.collage img:nth-child(1) { top: 0%; left: 40%; width: 20%; z-index:2; }
-.collage img:nth-child(2) { top: 20%; left: 20%; width: 20%; z-index:2; }
-.collage img:nth-child(3) { top: 20%; right: 20%; width: 20%; z-index:2; }
-.collage img:nth-child(7) { top: 35%; left: 30%; width: 40%; z-index:5; } /* center focal */
-.collage img:nth-child(4) { top: 60%; left: 20%; width: 20%; z-index:2; }
-.collage img:nth-child(5) { top: 60%; right: 20%; width: 20%; z-index:2; }
-.collage img:nth-child(6) { bottom: 0%; left: 40%; width: 20%; z-index:2; }
+/* Specific photo placement */
+.photo1 { grid-column: 1 / span 2; grid-row: 1; }
+.photo2 { grid-column: 1; grid-row: 2; }
+.photo3 { grid-column: 2; grid-row: 2; }
+.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* center large */
+.photo4 { grid-column: 1; grid-row: 4; }
+.photo5 { grid-column: 2; grid-row: 4; }
+.photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
-/* Letter completely below collage */
+/* Letter below collage */
 .letter {
-  position: relative;
   display: block;
   max-width: 900px;
   margin: 20px auto 80px auto;
@@ -122,20 +125,21 @@ body {
   background-image: url('https://i.imgur.com/46e8VzS.png');
   background-size: contain;
   background-repeat: no-repeat;
-  opacity: .7;
+  opacity: 0.7;
   pointer-events: none;
   z-index: 28;
 }
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
-  .collage img:nth-child(1) { top: 0%; left: 30%; width: 40%; }
-  .collage img:nth-child(2) { top: 18%; left: 10%; width: 35%; }
-  .collage img:nth-child(3) { top: 18%; right: 10%; width: 35%; }
-  .collage img:nth-child(7) { top: 32%; left: 10%; width: 80%; }
-  .collage img:nth-child(4) { top: 58%; left: 10%; width: 35%; }
-  .collage img:nth-child(5) { top: 58%; right: 10%; width: 35%; }
-  .collage img:nth-child(6) { bottom: 0%; left: 30%; width: 40%; }
+  .collage {
+    grid-template-rows: repeat(7, 1fr);
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 5px;
+  }
+  .photo1, .photo7, .photo6 { grid-column: 1; }
+  .photo2, .photo3, .photo4, .photo5 { grid-column: 1; }
 }
 </style>
 </head>
@@ -147,17 +151,17 @@ body {
 </div>
 
 <div id="mainContent">
-  <div class="collage" id="collage">
-    <img src="photo1.jpeg">
-    <img src="photo2.jpeg">
-    <img src="photo3.jpeg">
-    <img src="photo4.jpeg">
-    <img src="photo5.jpeg">
-    <img src="photo6.jpeg">
-    <img src="photo7.jpeg">
+  <div class="collage">
+    <img src="photo1.jpeg" class="photo1">
+    <img src="photo2.jpeg" class="photo2">
+    <img src="photo3.jpeg" class="photo3">
+    <img src="photo7.jpeg" class="photo7">
+    <img src="photo4.jpeg" class="photo4">
+    <img src="photo5.jpeg" class="photo5">
+    <img src="photo6.jpeg" class="photo6">
   </div>
 
-  <div class="letter" id="letter">
+  <div class="letter">
     My love,<br><br>
     Every moment with you feels like magic.
     You are my favorite memory, my favorite laugh,
@@ -178,7 +182,7 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Frogs falling from top of page */
+/* Frogs falling from top of the viewport */
 function createFrogs() {
   const frogCount = window.innerWidth < 600 ? 20 : 50;
 
@@ -201,17 +205,16 @@ function createFrogs() {
       frog.x += frog.vx;
       frog.y += frog.vy;
       frog.rotation += frog.spinSpeed;
-
       frog.style.transform = `translate(${frog.x}px, ${frog.y}px) rotate(${frog.rotation}deg)`;
 
-      if (frog.y < window.innerHeight) requestAnimationFrame(animate);
+      if (frog.y < window.innerHeight + 50) requestAnimationFrame(animate);
     }
 
     animate();
   }
 }
 
-/* Leaves falling from top of page */
+/* Leaves falling from top of viewport */
 function createLeaves() {
   const leafCount = window.innerWidth < 600 ? 10 : 15;
 
@@ -226,7 +229,7 @@ function createLeaves() {
     function animateLeaf() {
       leaf.y += leaf.speed;
       leaf.x += Math.sin(leaf.y * 0.01);
-      if (leaf.y > window.innerHeight) {
+      if (leaf.y > window.innerHeight + 20) {
         leaf.y = -20;
         leaf.x = Math.random() * window.innerWidth;
       }
