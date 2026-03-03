@@ -14,8 +14,8 @@
 
 body {
   font-family: 'Poppins', sans-serif;
-  overflow-x: hidden;
   background: #000;
+  overflow-x: hidden;
   text-align: center;
 }
 
@@ -34,7 +34,6 @@ body {
 #openScreen h1 {
   font-size: 32px;
   font-weight: 700;
-  letter-spacing: 1px;
 }
 
 .envelope {
@@ -42,53 +41,52 @@ body {
   margin-bottom: 20px;
 }
 
-/* CONTENT AREA */
-#content {
+/* PANELS */
+.panel {
   display: none;
-  position: relative;
+  padding: 20px 15px 40px;
 }
 
-/* PHOTO SLIDER */
-.slide {
-  display: none;
-  padding: 20px;
-}
-
-.slide.active {
+.panel.active {
   display: block;
 }
 
-.slide img {
-  width: 95%;
-  max-height: 75vh;
-  object-fit: contain;
-  border-radius: 20px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 }
 
+.grid img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* CAPTION */
 .caption {
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 18px;
   color: white;
 }
 
 /* LETTER */
 .letter {
-  margin: 30px auto;
-  padding: 30px;
-  width: 90%;
-  max-width: 500px;
+  margin-top: 30px;
+  padding: 25px;
   background: linear-gradient(135deg, #2e8b57, #3cb371);
   color: white;
   border-radius: 20px;
   font-size: 18px;
   line-height: 1.6;
-  display: none;
 }
 
-/* NEXT BUTTON */
+/* BUTTON */
 .nextBtn {
-  margin: 25px 0;
+  margin-top: 25px;
   padding: 12px 25px;
   background: #3cb371;
   border: none;
@@ -98,18 +96,25 @@ body {
   cursor: pointer;
 }
 
-/* FALLING ITEMS */
-.falling {
+/* BALLOON FLOAT */
+.balloon {
   position: fixed;
-  top: -60px;
+  bottom: -100px;
   pointer-events: none;
-  z-index: 1000;
-  animation: fall linear forwards;
+  z-index: 9999;
+  animation: floatUp linear forwards;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-50vh) translateX(25px);
+  }
+  100% {
+    transform: translateY(-120vh) translateX(-25px);
   }
 }
 </style>
@@ -122,112 +127,106 @@ body {
   <h1>Click to Open</h1>
 </div>
 
-<!-- CONTENT -->
-<div id="content">
+<div id="content" style="display:none">
 
-  <!-- PHOTO 1 -->
-  <div class="slide active">
-    <img src="photo1.jpeg">
-    <div class="caption">Caption for Photo 1</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  <!-- PANEL 1 -->
+  <div class="panel active">
+    <div class="grid">
+      <img src="photo8.jpeg">
+      <img src="photo9.jpeg">
+      <img src="photo10.jpeg">
+      <img src="photo11.jpeg">
+    </div>
+    <div class="caption">Our beautiful memories ❤️</div>
+    <button class="nextBtn" onclick="nextPanel()">Next</button>
   </div>
 
-  <!-- PHOTO 2 -->
-  <div class="slide">
-    <img src="photo2.jpeg">
-    <div class="caption">Caption for Photo 2</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  <!-- PANEL 2 -->
+  <div class="panel">
+    <div class="grid">
+      <img src="photo12.jpeg">
+      <img src="photo13.jpeg">
+      <img src="photo14.jpeg">
+      <img src="photo15.jpeg">
+    </div>
+    <div class="caption">More adventures together ✨</div>
+    <button class="nextBtn" onclick="nextPanel()">Next</button>
   </div>
 
-  <!-- PHOTO 3 -->
-  <div class="slide">
-    <img src="photo3.jpeg">
-    <div class="caption">Caption for Photo 3</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
-  </div>
+  <!-- FINAL PANEL -->
+  <div class="panel">
+    <div class="grid">
+      <img src="photo2.jpeg">
+      <img src="photo3.jpeg">
+      <img src="photo4.jpeg">
+      <img src="photo5.jpeg">
+    </div>
 
-  <!-- PHOTO 4 -->
-  <div class="slide">
-    <img src="photo4.jpeg">
-    <div class="caption">Caption for Photo 4</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
-  </div>
-
-  <!-- PHOTO 5 -->
-  <div class="slide">
-    <img src="photo5.jpeg">
-    <div class="caption">Caption for Photo 5</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
-  </div>
-
-  <!-- PHOTO 6 -->
-  <div class="slide">
-    <img src="photo6.jpeg">
-    <div class="caption">Caption for Photo 6</div>
-    <button class="nextBtn" onclick="nextSlide()">Next</button>
-  </div>
-
-  <!-- PHOTO 7 (NO CAPTION) -->
-  <div class="slide">
-    <img src="photo7.jpeg">
-    <button class="nextBtn" onclick="showLetter()">Open Letter</button>
-  </div>
-
-  <!-- LETTER -->
-  <div class="letter" id="letter">
-    My love,<br><br>
-    Happy Birthday ❤️  
-    You mean everything to me and I’m so lucky to share life with you.
-    Every memory in these photos is one I cherish deeply.
-    I love you more than words can say.
+    <div class="letter">
+      My love,<br><br>
+      Happy Birthday ❤️<br><br>
+      Every photo here is a reminder of how lucky I am.
+      You make my world brighter every single day.
+      I love you more than words can ever explain.
+    </div>
   </div>
 
 </div>
 
 <script>
 let current = 0;
-const slides = document.querySelectorAll(".slide");
+const panels = document.querySelectorAll(".panel");
 const openScreen = document.getElementById("openScreen");
 const content = document.getElementById("content");
+let balloonsStarted = false;
 
 openScreen.addEventListener("click", () => {
   openScreen.style.display = "none";
   content.style.display = "block";
-  startFalling();
 });
 
-/* NEXT SLIDE */
-function nextSlide() {
-  slides[current].classList.remove("active");
+/* NEXT PANEL */
+function nextPanel() {
+  panels[current].classList.remove("active");
   current++;
-  slides[current].classList.add("active");
+  panels[current].classList.add("active");
+
+  if (current === panels.length - 1 && !balloonsStarted) {
+    balloonsStarted = true;
+    startBalloons();
+  }
 }
 
-/* SHOW LETTER */
-function showLetter() {
-  slides[current].classList.remove("active");
-  document.getElementById("letter").style.display = "block";
-}
+/* PASTEL COLORS */
+const pastelColors = [
+  "#FFD1DC", // pastel pink
+  "#C1E1C1", // pastel green
+  "#B5D8FF", // pastel blue
+  "#FFF4B5", // pastel yellow
+  "#E0BBE4", // pastel purple
+  "#FFDAC1"  // peach
+];
 
-/* FALLING FROGS + LEAVES */
-function startFalling() {
+/* SLOW FLOATING BALLOONS */
+function startBalloons() {
   setInterval(() => {
-    const item = document.createElement("img");
-    item.src = Math.random() > 0.5 
-      ? "https://i.imgur.com/gXaNddC.png"   // frog
-      : "https://i.imgur.com/46e8VzS.png";  // leaf
-    
-    item.classList.add("falling");
-    item.style.left = Math.random() * 100 + "vw";
-    item.style.width = (20 + Math.random() * 20) + "px";
-    item.style.animationDuration = (5 + Math.random() * 5) + "s";
-    
-    document.body.appendChild(item);
-    
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+    balloon.textContent = "🎈";
+
+    const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
+    balloon.style.color = randomColor;
+
+    balloon.style.left = Math.random() * 100 + "vw";
+    balloon.style.fontSize = (28 + Math.random() * 18) + "px";
+    balloon.style.animationDuration = (9 + Math.random() * 6) + "s";
+
+    document.body.appendChild(balloon);
+
     setTimeout(() => {
-      item.remove();
-    }, 10000);
-  }, 600);
+      balloon.remove();
+    }, 15000);
+  }, 1200);
 }
 </script>
 
