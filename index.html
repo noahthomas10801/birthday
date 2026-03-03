@@ -15,7 +15,7 @@ body {
   background: white;
 }
 
-/* Opening Screen */
+/* OPEN SCREEN */
 #startScreen {
   position: fixed;
   inset: 0;
@@ -26,19 +26,18 @@ body {
   justify-content: center;
   z-index: 100;
   cursor: pointer;
-  transition: opacity .4s ease;
 }
 
 #startScreen h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   color: white;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .envelope {
-  width: 80px;
-  height: 55px;
+  width: 75px;
+  height: 50px;
   background: white;
   border-radius: 6px;
   position: relative;
@@ -49,37 +48,51 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  border-left: 40px solid transparent;
-  border-right: 40px solid transparent;
-  border-top: 28px solid #e0e0e0;
+  border-left: 37px solid transparent;
+  border-right: 37px solid transparent;
+  border-top: 25px solid #e0e0e0;
 }
 
-/* Main content */
+/* MAIN */
 #mainContent {
   display: none;
 }
 
-/* Collage */
+/* COLLAGE */
 .collage {
   display: grid;
   width: 100vw;
   min-height: 100vh;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 12vh 20vh 30vh 20vh 12vh;
-  gap: 6px;
-  padding: 6px;
+  grid-template-rows: 12vh 22vh 32vh 22vh 12vh;
+  gap: 8px;
+  padding: 8px;
   box-sizing: border-box;
 }
 
-.collage img {
-  width: 100%;
+.photo-block {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+}
+
+.photo-block img {
+  flex: 1;
+  width: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-/* Pyramid Layout */
+.caption {
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 6px;
+  font-weight: 600;
+  color: #1b4332;
+}
+
+/* PYRAMID GRID PLACEMENT */
 .photo1 { grid-column: 1 / span 2; grid-row: 1; }
 .photo2 { grid-column: 1; grid-row: 2; }
 .photo3 { grid-column: 2; grid-row: 2; }
@@ -88,14 +101,14 @@ body {
 .photo5 { grid-column: 2; grid-row: 4; }
 .photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
-/* Letter */
+/* LETTER */
 .letter {
   width: 90%;
   max-width: 800px;
-  margin: 40px auto 80px auto;
-  padding: 24px;
+  margin: 20px auto 60px auto; /* reduced white space */
+  padding: 22px;
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   line-height: 1.8;
   font-weight: 600;
   text-align: center;
@@ -104,57 +117,55 @@ body {
   border-radius: 18px;
 }
 
-/* Falling frogs */
+/* FALLING ANIMATIONS */
 .frog {
   position: fixed;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   background: url('https://i.imgur.com/gXaNddC.png') center/contain no-repeat;
   pointer-events: none;
   z-index: 200;
 }
 
-/* Falling leaves */
 .leaf {
   position: fixed;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   background: url('https://i.imgur.com/46e8VzS.png') center/contain no-repeat;
   pointer-events: none;
   opacity: .85;
   z-index: 190;
 }
 
-/* Mobile improvements */
+/* MOBILE OPTIMIZATION */
 @media (max-width: 600px) {
 
   #startScreen h1 {
-    font-size: 2rem;
+    font-size: 1.9rem;
   }
 
   .collage {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(7, 40vh);
-    gap: 8px;
-    padding: 8px;
+    grid-template-rows: repeat(7, auto);
+    gap: 14px;
+    padding: 14px;
   }
 
-  .photo1,
-  .photo2,
-  .photo3,
-  .photo4,
-  .photo5,
-  .photo6,
-  .photo7 {
-    grid-column: 1;
+  .photo-block img {
+    height: 50vh;
+  }
+
+  .caption {
+    font-size: 0.95rem;
   }
 
   .letter {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
 }
 </style>
 </head>
+
 <body>
 
 <div id="startScreen">
@@ -163,14 +174,44 @@ body {
 </div>
 
 <div id="mainContent">
+
   <div class="collage">
-    <img src="photo1.jpeg" class="photo1">
-    <img src="photo2.jpeg" class="photo2">
-    <img src="photo3.jpeg" class="photo3">
-    <img src="photo7.jpeg" class="photo7">
-    <img src="photo4.jpeg" class="photo4">
-    <img src="photo5.jpeg" class="photo5">
-    <img src="photo6.jpeg" class="photo6">
+
+    <div class="photo-block photo1">
+      <img src="photo1.jpeg">
+      <div class="caption">Caption for photo 1</div>
+    </div>
+
+    <div class="photo-block photo2">
+      <img src="photo2.jpeg">
+      <div class="caption">Caption for photo 2</div>
+    </div>
+
+    <div class="photo-block photo3">
+      <img src="photo3.jpeg">
+      <div class="caption">Caption for photo 3</div>
+    </div>
+
+    <div class="photo-block photo7">
+      <img src="photo7.jpeg">
+      <div class="caption">Center moment 💚</div>
+    </div>
+
+    <div class="photo-block photo4">
+      <img src="photo4.jpeg">
+      <div class="caption">Caption for photo 4</div>
+    </div>
+
+    <div class="photo-block photo5">
+      <img src="photo5.jpeg">
+      <div class="caption">Caption for photo 5</div>
+    </div>
+
+    <div class="photo-block photo6">
+      <img src="photo6.jpeg">
+      <div class="caption">Caption for photo 6</div>
+    </div>
+
   </div>
 
   <div class="letter">
@@ -180,46 +221,38 @@ body {
     and my favorite place to be.
     I made this just for you. 💚
   </div>
+
 </div>
 
 <script>
 const startScreen = document.getElementById("startScreen");
 const mainContent = document.getElementById("mainContent");
 
-/* Faster open for iPhone */
-function openSite() {
-  startScreen.style.opacity = "0";
-  setTimeout(() => {
-    startScreen.style.display = "none";
-    mainContent.style.display = "block";
-    startAnimations();
-  }, 300);
-}
+/* FAST OPEN — optimized for iPhone */
+startScreen.addEventListener("click", () => {
+  startScreen.remove();  // instant removal for speed
+  mainContent.style.display = "block";
+  startAnimations();
+}, { once: true });
 
-startScreen.addEventListener("click", openSite);
-startScreen.addEventListener("touchstart", openSite);
-
-/* Continuous falling animation */
+/* LIGHTWEIGHT ANIMATIONS */
 function startAnimations() {
-  setInterval(() => spawnFrog(), 300);
-  setInterval(() => spawnLeaf(), 600);
+  setInterval(spawnFrog, 400);
+  setInterval(spawnLeaf, 800);
 }
 
 function spawnFrog() {
   const frog = document.createElement("div");
   frog.className = "frog";
   frog.style.left = Math.random() * window.innerWidth + "px";
-  frog.style.top = "-40px";
+  frog.style.top = "-30px";
   document.body.appendChild(frog);
 
-  let y = -40;
-  let xDrift = (Math.random() - 0.5) * 2;
-
+  let y = -30;
   function fall() {
-    y += 2 + Math.random();
+    y += 2;
     frog.style.top = y + "px";
-    frog.style.left = parseFloat(frog.style.left) + xDrift + "px";
-    if (y < window.innerHeight + 40) {
+    if (y < window.innerHeight + 30) {
       requestAnimationFrame(fall);
     } else {
       frog.remove();
@@ -232,17 +265,16 @@ function spawnLeaf() {
   const leaf = document.createElement("div");
   leaf.className = "leaf";
   leaf.style.left = Math.random() * window.innerWidth + "px";
-  leaf.style.top = "-40px";
+  leaf.style.top = "-30px";
   document.body.appendChild(leaf);
 
-  let y = -40;
-
+  let y = -30;
   function fall() {
-    y += 1.2;
+    y += 1.3;
     leaf.style.top = y + "px";
     leaf.style.left =
       parseFloat(leaf.style.left) + Math.sin(y * 0.02) * 2 + "px";
-    if (y < window.innerHeight + 40) {
+    if (y < window.innerHeight + 30) {
       requestAnimationFrame(fall);
     } else {
       leaf.remove();
