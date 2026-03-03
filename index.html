@@ -3,284 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Me 💌</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>Open Letter 💌</title>
 
 <style>
-body {
+* {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
-  background: white;
-}
-
-/* OPEN SCREEN */
-#startScreen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #a8e063, #56ab2f);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  cursor: pointer;
-}
-
-#startScreen h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.3rem;
-  color: white;
-  margin-top: 18px;
-}
-
-.envelope {
-  width: 75px;
-  height: 50px;
-  background: white;
-  border-radius: 6px;
-  position: relative;
-}
-
-.envelope:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-left: 37px solid transparent;
-  border-right: 37px solid transparent;
-  border-top: 25px solid #e0e0e0;
-}
-
-/* MAIN */
-#mainContent {
-  display: none;
-}
-
-/* COLLAGE */
-.collage {
-  display: grid;
-  width: 100vw;
-  min-height: 100vh;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 12vh 22vh 32vh 22vh 12vh;
-  gap: 8px;
-  padding: 8px;
+  padding: 0;
   box-sizing: border-box;
 }
 
-.photo-block {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+body {
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+  background: #000;
+  text-align: center;
 }
 
-.photo-block img {
-  flex: 1;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+/* OPEN SCREEN */
+#openScreen {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f3d1e, #1f6f3a);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+}
+
+#openScreen h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.envelope {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+/* CONTENT AREA */
+#content {
+  display: none;
+  position: relative;
+}
+
+/* PHOTO SLIDER */
+.slide {
+  display: none;
+  padding: 20px;
+}
+
+.slide.active {
+  display: block;
+}
+
+.slide img {
+  width: 95%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
 .caption {
-  font-size: 0.9rem;
-  text-align: center;
-  margin-top: 6px;
-  font-weight: 600;
-  color: #1b4332;
+  margin-top: 15px;
+  font-size: 18px;
+  color: white;
 }
-
-/* PYRAMID GRID PLACEMENT */
-.photo1 { grid-column: 1 / span 2; grid-row: 1; }
-.photo2 { grid-column: 1; grid-row: 2; }
-.photo3 { grid-column: 2; grid-row: 2; }
-.photo7 { grid-column: 1 / span 2; grid-row: 3; }
-.photo4 { grid-column: 1; grid-row: 4; }
-.photo5 { grid-column: 2; grid-row: 4; }
-.photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
 /* LETTER */
 .letter {
+  margin: 30px auto;
+  padding: 30px;
   width: 90%;
-  max-width: 800px;
-  margin: 20px auto 60px auto; /* reduced white space */
-  padding: 22px;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem;
-  line-height: 1.8;
-  font-weight: 600;
-  text-align: center;
-  color: #1b4332;
-  background: linear-gradient(135deg, #c8f7c5, #56ab2f);
-  border-radius: 18px;
+  max-width: 500px;
+  background: linear-gradient(135deg, #2e8b57, #3cb371);
+  color: white;
+  border-radius: 20px;
+  font-size: 18px;
+  line-height: 1.6;
+  display: none;
 }
 
-/* FALLING ANIMATIONS */
-.frog {
+/* NEXT BUTTON */
+.nextBtn {
+  margin: 25px 0;
+  padding: 12px 25px;
+  background: #3cb371;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* FALLING ITEMS */
+.falling {
   position: fixed;
-  width: 28px;
-  height: 28px;
-  background: url('https://i.imgur.com/gXaNddC.png') center/contain no-repeat;
+  top: -60px;
   pointer-events: none;
-  z-index: 200;
+  z-index: 1000;
+  animation: fall linear forwards;
 }
 
-.leaf {
-  position: fixed;
-  width: 22px;
-  height: 22px;
-  background: url('https://i.imgur.com/46e8VzS.png') center/contain no-repeat;
-  pointer-events: none;
-  opacity: .85;
-  z-index: 190;
-}
-
-/* MOBILE OPTIMIZATION */
-@media (max-width: 600px) {
-
-  #startScreen h1 {
-    font-size: 1.9rem;
-  }
-
-  .collage {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(7, auto);
-    gap: 14px;
-    padding: 14px;
-  }
-
-  .photo-block img {
-    height: 50vh;
-  }
-
-  .caption {
-    font-size: 0.95rem;
-  }
-
-  .letter {
-    font-size: 1.1rem;
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
   }
 }
 </style>
 </head>
-
 <body>
 
-<div id="startScreen">
-  <div class="envelope"></div>
+<!-- OPEN SCREEN -->
+<div id="openScreen">
+  <div class="envelope">✉️</div>
   <h1>Click to Open</h1>
 </div>
 
-<div id="mainContent">
+<!-- CONTENT -->
+<div id="content">
 
-  <div class="collage">
-
-    <div class="photo-block photo1">
-      <img src="photo1.jpeg">
-      <div class="caption">Caption for photo 1</div>
-    </div>
-
-    <div class="photo-block photo2">
-      <img src="photo2.jpeg">
-      <div class="caption">Caption for photo 2</div>
-    </div>
-
-    <div class="photo-block photo3">
-      <img src="photo3.jpeg">
-      <div class="caption">Caption for photo 3</div>
-    </div>
-
-    <div class="photo-block photo7">
-      <img src="photo7.jpeg">
-      <div class="caption">Center moment 💚</div>
-    </div>
-
-    <div class="photo-block photo4">
-      <img src="photo4.jpeg">
-      <div class="caption">Caption for photo 4</div>
-    </div>
-
-    <div class="photo-block photo5">
-      <img src="photo5.jpeg">
-      <div class="caption">Caption for photo 5</div>
-    </div>
-
-    <div class="photo-block photo6">
-      <img src="photo6.jpeg">
-      <div class="caption">Caption for photo 6</div>
-    </div>
-
+  <!-- PHOTO 1 -->
+  <div class="slide active">
+    <img src="photo1.jpeg">
+    <div class="caption">Caption for Photo 1</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
   </div>
 
-  <div class="letter">
+  <!-- PHOTO 2 -->
+  <div class="slide">
+    <img src="photo2.jpeg">
+    <div class="caption">Caption for Photo 2</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  </div>
+
+  <!-- PHOTO 3 -->
+  <div class="slide">
+    <img src="photo3.jpeg">
+    <div class="caption">Caption for Photo 3</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  </div>
+
+  <!-- PHOTO 4 -->
+  <div class="slide">
+    <img src="photo4.jpeg">
+    <div class="caption">Caption for Photo 4</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  </div>
+
+  <!-- PHOTO 5 -->
+  <div class="slide">
+    <img src="photo5.jpeg">
+    <div class="caption">Caption for Photo 5</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  </div>
+
+  <!-- PHOTO 6 -->
+  <div class="slide">
+    <img src="photo6.jpeg">
+    <div class="caption">Caption for Photo 6</div>
+    <button class="nextBtn" onclick="nextSlide()">Next</button>
+  </div>
+
+  <!-- PHOTO 7 (NO CAPTION) -->
+  <div class="slide">
+    <img src="photo7.jpeg">
+    <button class="nextBtn" onclick="showLetter()">Open Letter</button>
+  </div>
+
+  <!-- LETTER -->
+  <div class="letter" id="letter">
     My love,<br><br>
-    Every moment with you feels like magic.
-    You are my favorite memory, my favorite laugh,
-    and my favorite place to be.
-    I made this just for you. 💚
+    Happy Birthday ❤️  
+    You mean everything to me and I’m so lucky to share life with you.
+    Every memory in these photos is one I cherish deeply.
+    I love you more than words can say.
   </div>
 
 </div>
 
 <script>
-const startScreen = document.getElementById("startScreen");
-const mainContent = document.getElementById("mainContent");
+let current = 0;
+const slides = document.querySelectorAll(".slide");
+const openScreen = document.getElementById("openScreen");
+const content = document.getElementById("content");
 
-/* FAST OPEN — optimized for iPhone */
-startScreen.addEventListener("click", () => {
-  startScreen.remove();  // instant removal for speed
-  mainContent.style.display = "block";
-  startAnimations();
-}, { once: true });
+openScreen.addEventListener("click", () => {
+  openScreen.style.display = "none";
+  content.style.display = "block";
+  startFalling();
+});
 
-/* LIGHTWEIGHT ANIMATIONS */
-function startAnimations() {
-  setInterval(spawnFrog, 400);
-  setInterval(spawnLeaf, 800);
+/* NEXT SLIDE */
+function nextSlide() {
+  slides[current].classList.remove("active");
+  current++;
+  slides[current].classList.add("active");
 }
 
-function spawnFrog() {
-  const frog = document.createElement("div");
-  frog.className = "frog";
-  frog.style.left = Math.random() * window.innerWidth + "px";
-  frog.style.top = "-30px";
-  document.body.appendChild(frog);
-
-  let y = -30;
-  function fall() {
-    y += 2;
-    frog.style.top = y + "px";
-    if (y < window.innerHeight + 30) {
-      requestAnimationFrame(fall);
-    } else {
-      frog.remove();
-    }
-  }
-  fall();
+/* SHOW LETTER */
+function showLetter() {
+  slides[current].classList.remove("active");
+  document.getElementById("letter").style.display = "block";
 }
 
-function spawnLeaf() {
-  const leaf = document.createElement("div");
-  leaf.className = "leaf";
-  leaf.style.left = Math.random() * window.innerWidth + "px";
-  leaf.style.top = "-30px";
-  document.body.appendChild(leaf);
-
-  let y = -30;
-  function fall() {
-    y += 1.3;
-    leaf.style.top = y + "px";
-    leaf.style.left =
-      parseFloat(leaf.style.left) + Math.sin(y * 0.02) * 2 + "px";
-    if (y < window.innerHeight + 30) {
-      requestAnimationFrame(fall);
-    } else {
-      leaf.remove();
-    }
-  }
-  fall();
+/* FALLING FROGS + LEAVES */
+function startFalling() {
+  setInterval(() => {
+    const item = document.createElement("img");
+    item.src = Math.random() > 0.5 
+      ? "https://i.imgur.com/gXaNddC.png"   // frog
+      : "https://i.imgur.com/46e8VzS.png";  // leaf
+    
+    item.classList.add("falling");
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.width = (20 + Math.random() * 20) + "px";
+    item.style.animationDuration = (5 + Math.random() * 5) + "s";
+    
+    document.body.appendChild(item);
+    
+    setTimeout(() => {
+      item.remove();
+    }, 10000);
+  }, 600);
 }
 </script>
 
