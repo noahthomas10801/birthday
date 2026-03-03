@@ -72,7 +72,7 @@ body {
   transform: translateY(0);
 }
 
-/* Creative Collage */
+/* Collage */
 .collage {
   position: relative;
   max-width: 700px;
@@ -92,13 +92,14 @@ body {
   z-index: 20;
 }
 
-/* Positioning photos creatively with photo7 as center focal */
+/* Desktop positions with photo7 as focal */
 .collage img:nth-child(1) { top: 0; left: 5%; transform: rotate(-6deg); z-index: 1; }
 .collage img:nth-child(2) { top: 40px; right: 5%; transform: rotate(8deg); z-index: 2; }
 .collage img:nth-child(3) { top: 160px; left: 15%; transform: rotate(-4deg); z-index: 3; }
 .collage img:nth-child(4) { top: 200px; right: 10%; transform: rotate(6deg); z-index: 4; }
 .collage img:nth-child(5) { top: 300px; left: 30%; transform: rotate(-8deg); z-index: 5; }
 .collage img:nth-child(6) { top: 100px; left: 35%; transform: rotate(5deg); z-index: 6; }
+/* Center focal photo */
 .collage img:nth-child(7) { top: 180px; left: 50%; transform: translateX(-50%) rotate(-2deg); width: 55%; z-index: 8; }
 
 /* Letter */
@@ -110,7 +111,9 @@ body {
   font-weight: 600;
   line-height: 1.8;
   color: #1b4332;
-  padding: 0 15px;
+  padding: 15px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
 }
 
 /* Sparkles */
@@ -160,9 +163,22 @@ body {
 /* Mobile adjustments */
 @media (max-width: 600px) {
   #startScreen h1 { font-size: 2rem; }
-  .letter { font-size: 1.1rem; }
-  .collage { height: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .collage img { position: relative; width: 100%; transform: none !important; }
+  .letter { font-size: 1.2rem; line-height: 1.6; padding: 12px; }
+  
+  .collage {
+    position: relative;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .collage img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    transform: none !important;
+  }
 }
 </style>
 </head>
@@ -215,7 +231,7 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Sparkles along collage edges */
+/* Edge Sparkles */
 function createSparkles() {
   const collage = document.getElementById("collage");
   const rect = collage.getBoundingClientRect();
@@ -241,9 +257,9 @@ function createSparkles() {
   }
 }
 
-/* Balanced frogs */
+/* Frogs */
 function createFrogs() {
-  const frogCount = window.innerWidth < 600 ? 50 : 70;
+  const frogCount = window.innerWidth < 600 ? 30 : 70;
 
   for (let i = 0; i < frogCount; i++) {
     spawnFrog(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
@@ -302,7 +318,7 @@ function createFrogs() {
 
 /* Leaves */
 function createLeaves() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     const leaf = document.createElement("div");
     leaf.classList.add("leaf");
     leaf.x = Math.random() * window.innerWidth;
