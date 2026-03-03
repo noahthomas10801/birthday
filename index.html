@@ -11,8 +11,9 @@
 body {
   font-family: 'Poppins', sans-serif;
   background:#000;
-  overflow-x:hidden;
+  overflow:hidden;
   text-align:center;
+  touch-action: pan-y;
 }
 
 /* OPEN SCREEN */
@@ -29,11 +30,28 @@ body {
 
 .envelope { font-size:60px; margin-bottom:20px; }
 
-#content { display:none; }
+#content {
+  display:none;
+  position:relative;
+  height:100vh;
+  width:100vw;
+}
 
 /* PANELS */
-.panel { display:none; padding:20px 15px 40px; }
-.panel.active { display:block; }
+.panel {
+  position:absolute;
+  width:100%;
+  height:100%;
+  padding:20px;
+  opacity:0;
+  transition:opacity 0.6s ease;
+  overflow-y:auto;
+}
+
+.panel.active {
+  opacity:1;
+  z-index:2;
+}
 
 /* GRID */
 .grid {
@@ -47,7 +65,7 @@ body {
   height:180px;
   object-fit:cover;
   border-radius:18px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+  box-shadow:0 8px 20px rgba(0,0,0,0.4);
 }
 
 /* CAPTION */
@@ -59,55 +77,45 @@ body {
 
 /* LETTER */
 .letter {
-  margin-top:30px;
-  padding:25px;
+  margin-top:25px;
+  padding:20px;
   background:linear-gradient(135deg,#2e8b57,#3cb371);
   color:white;
-  border-radius:20px;
-  font-size:18px;
+  border-radius:18px;
+  font-size:17px;
   line-height:1.6;
 }
 
-/* BUTTON */
-.nextBtn {
-  margin-top:25px;
-  padding:12px 25px;
-  background:#3cb371;
-  border:none;
-  border-radius:25px;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
+/* ANIMATION LAYERS */
+.animLayer {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:5;
 }
 
-/* FALLING ITEMS */
-.fallItem {
-  position:fixed;
+.fall {
+  position:absolute;
   top:-60px;
-  pointer-events:none;
-  z-index:9999;
-  animation:fall linear forwards;
+  animation:fall linear infinite;
 }
 
 @keyframes fall {
-  to {
-    transform:translateY(110vh) rotate(360deg);
-  }
+  to { transform:translateY(110vh) rotate(360deg); }
 }
 
-/* FLOAT BALLOONS */
 .balloon {
-  position:fixed;
+  position:absolute;
   bottom:-80px;
-  pointer-events:none;
-  z-index:9999;
-  animation:floatUp linear forwards;
+  animation:floatUp linear infinite;
 }
 
 @keyframes floatUp {
-  to {
-    transform:translateY(-120vh);
-  }
+  to { transform:translateY(-120vh); }
 }
 </style>
 </head>
@@ -120,6 +128,11 @@ body {
 
 <div id="content">
 
+<!-- Animation Layers -->
+<div id="frogsLayer" class="animLayer"></div>
+<div id="strawLayer" class="animLayer"></div>
+<div id="balloonLayer" class="animLayer"></div>
+
 <!-- PANEL 1 -->
 <div class="panel active">
   <div class="grid">
@@ -129,7 +142,6 @@ body {
     <img src="photo11.jpeg">
   </div>
   <div class="caption">Our beautiful memories ❤️</div>
-  <button class="nextBtn" onclick="nextPanel()">Next</button>
 </div>
 
 <!-- PANEL 2 -->
@@ -141,7 +153,6 @@ body {
     <img src="photo15.jpeg">
   </div>
   <div class="caption">More adventures together ✨</div>
-  <button class="nextBtn" onclick="nextPanel()">Next</button>
 </div>
 
 <!-- FINAL PANEL -->
@@ -152,7 +163,6 @@ body {
     <img src="photo4.jpeg">
     <img src="photo5.jpeg">
   </div>
-
   <div class="letter">
     My love,<br><br>
     Happy Birthday ❤️<br><br>
@@ -170,67 +180,78 @@ const panels = document.querySelectorAll(".panel");
 const openScreen = document.getElementById("openScreen");
 const content = document.getElementById("content");
 
+const frogsLayer = document.getElementById("frogsLayer");
+const strawLayer = document.getElementById("strawLayer");
+const balloonLayer = document.getElementById("balloonLayer");
+
 openScreen.addEventListener("click", () => {
-  openScreen.style.display = "none";
-  content.style.display = "block";
-  frogsFall();
+  openScreen.style.display="none";
+  content.style.display="block";
+  activatePanel(0);
 });
 
-/* NAVIGATION */
+/* SWIPE NAVIGATION */
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e => {
+  let endX = e.changedTouches[0].clientX;
+  if(startX - endX > 50) nextPanel();
+  if(endX - startX > 50) prevPanel();
+});
+
 function nextPanel(){
+  if(current < panels.length-1){
+    activatePanel(current+1);
+  }
+}
+
+function prevPanel(){
+  if(current > 0){
+    activatePanel(current-1);
+  }
+}
+
+function activatePanel(index){
   panels[current].classList.remove("active");
-  current++;
+  current = index;
   panels[current].classList.add("active");
-
-  if(current === 1){
-    strawberriesFall();
-  }
-
-  if(current === 2){
-    balloonsFloat();
-  }
+  toggleAnimations();
 }
 
-/* OPTIMIZED FALLING GENERATOR */
-function createFalling(emoji, count){
+/* CSS-ONLY ANIMATION GENERATOR (one-time creation) */
+function generateFalling(layer, emoji, count, type="fall"){
   for(let i=0;i<count;i++){
-    const item = document.createElement("div");
-    item.className="fallItem";
-    item.textContent=emoji;
-    item.style.left=Math.random()*100+"vw";
-    item.style.fontSize=(20+Math.random()*20)+"px";
-    item.style.animationDuration=(4+Math.random()*3)+"s";
-    item.style.animationDelay=(Math.random()*2)+"s";
-    document.body.appendChild(item);
-
-    setTimeout(()=>item.remove(),8000);
+    const el=document.createElement("div");
+    el.textContent=emoji;
+    el.className=type;
+    el.style.left=Math.random()*100+"vw";
+    el.style.fontSize=(20+Math.random()*20)+"px";
+    el.style.animationDuration=(4+Math.random()*4)+"s";
+    el.style.animationDelay=(Math.random()*5)+"s";
+    layer.appendChild(el);
   }
 }
 
-function frogsFall(){
-  createFalling("🐸", 25);   // controlled amount for performance
+/* Generate once */
+generateFalling(frogsLayer,"🐸",20,"fall");
+generateFalling(strawLayer,"🍓",20,"fall");
+generateFalling(balloonLayer,"🎈",15,"balloon");
+
+/* Control visibility */
+function toggleAnimations(){
+  frogsLayer.style.display = current===0 ? "block":"none";
+  strawLayer.style.display = current===1 ? "block":"none";
+  balloonLayer.style.display = current===2 ? "block":"none";
 }
 
-function strawberriesFall(){
-  createFalling("🍓", 25);
-}
-
-/* FLOAT BALLOONS */
-function balloonsFloat(){
-  const pastel = ["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
-  for(let i=0;i<18;i++){
-    const b=document.createElement("div");
-    b.className="balloon";
-    b.textContent="🎈";
-    b.style.left=Math.random()*100+"vw";
-    b.style.fontSize=(28+Math.random()*18)+"px";
-    b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
-    b.style.animationDuration=(8+Math.random()*5)+"s";
-    document.body.appendChild(b);
-
-    setTimeout(()=>b.remove(),13000);
-  }
-}
+/* Hide initially */
+frogsLayer.style.display="none";
+strawLayer.style.display="none";
+balloonLayer.style.display="none";
 </script>
 
 </body>
