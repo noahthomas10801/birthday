@@ -51,7 +51,7 @@ body {
 
 /* LETTER */
 .letter {
-  margin-top:25px;
+  margin-top:15px;
   padding:20px;
   background:linear-gradient(135deg,#2e8b57,#3cb371);
   color:white;
@@ -82,41 +82,24 @@ body {
 .dot.active { opacity:1; }
 
 /* FALLING ITEMS */
-.animLayer {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:5;
-}
-
-/* falling item base */
+.animLayer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:5; }
 .fallItem {
   position:absolute;
-  top:-60px;
+  top:-50px;
   width:40px;
   height:40px;
   transform:translate3d(0,0,0);
-  animation-name:fall,sway;
-  animation-timing-function:linear,ease-in-out;
-  animation-iteration-count:infinite,infinite;
+  animation-name:fall,sway,rotate;
+  animation-timing-function:linear,ease-in-out,linear;
+  animation-iteration-count:infinite,infinite,infinite;
 }
 
-/* sway animation */
-@keyframes sway {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(15px); }
-  100% { transform: translateX(0); }
-}
+/* Animations */
+@keyframes fall { 0%{transform:translateY(0)} 100%{transform:translateY(110vh);} }
+@keyframes sway { 0%{transform:translateX(0)} 50%{transform:translateX(15px)} 100%{transform:translateX(0);} }
+@keyframes rotate { 0%{transform:rotate(0deg)} 50%{transform:rotate(15deg)} 100%{transform:rotate(0deg);} }
 
-/* vertical fall animation */
-@keyframes fall {
-  0% { transform: translateY(0) rotate(0deg); }
-  100% { transform: translateY(110vh) rotate(360deg); }
-}
-
-/* balloon */
+/* balloons */
 .balloon {
   position:absolute;
   bottom:-80px;
@@ -136,13 +119,12 @@ body {
 </div>
 
 <div id="content">
-
-  <!-- Animation Layers -->
+  <!-- Animation layers -->
   <div id="frogsLayer" class="animLayer"></div>
   <div id="strawLayer" class="animLayer"></div>
   <div id="balloonLayer" class="animLayer"></div>
 
-  <!-- PANEL 1 -->
+  <!-- Panels -->
   <div class="panel active">
     <div class="grid">
       <img src="photo8.jpeg">
@@ -153,7 +135,6 @@ body {
     <div class="caption">Our beautiful memories ❤️</div>
   </div>
 
-  <!-- PANEL 2 -->
   <div class="panel">
     <div class="grid">
       <img src="photo12.jpeg">
@@ -164,7 +145,6 @@ body {
     <div class="caption">More adventures together ✨</div>
   </div>
 
-  <!-- FINAL PANEL -->
   <div class="panel">
     <div class="grid">
       <img src="photo2.jpeg">
@@ -231,22 +211,22 @@ function activatePanel(index){
   toggleAnimations();
 }
 
-/* Create falling images */
+/* create falling images with PNGs */
 function generateFallingImage(layer,src,count){
   for(let i=0;i<count;i++){
     const img=document.createElement("img");
-    img.src=src;
+    img.src=src;           // MUST EXIST IN REPO
     img.className="fallItem";
     img.style.left=Math.random()*100+"vw";
     img.style.width=30+Math.random()*20+"px";
     img.style.height=30+Math.random()*20+"px";
-    img.style.animationDuration=(4+Math.random()*4)+"s, "+(2+Math.random()*2)+"s";
+    img.style.animationDuration=(4+Math.random()*4)+"s, "+(2+Math.random()*2)+"s, "+(2+Math.random()*2)+"s";
     img.style.animationDelay=Math.random()*5+"s";
     layer.appendChild(img);
   }
 }
 
-/* Balloons */
+/* balloons */
 function generateBalloons(layer,count){
   const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
   for(let i=0;i<count;i++){
@@ -261,9 +241,9 @@ function generateBalloons(layer,count){
   }
 }
 
-/* Generate once with PNGs */
-generateFallingImage(frogsLayer,"frog.png",25);        // use small frog PNG in repo
-generateFallingImage(strawLayer,"strawberry.png",25);  // use small strawberry PNG in repo
+/* generate once */
+generateFallingImage(frogsLayer,"frog.png",25);
+generateFallingImage(strawLayer,"strawberry.png",25);
 generateBalloons(balloonLayer,15);
 
 function toggleAnimations(){
@@ -272,7 +252,6 @@ function toggleAnimations(){
   balloonLayer.style.display=current===2?"block":"none";
 }
 
-/* hide initially */
 frogsLayer.style.display="none";
 strawLayer.style.display="none";
 balloonLayer.style.display="none";
