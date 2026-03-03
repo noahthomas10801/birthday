@@ -11,19 +11,18 @@
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: #fff;
   overflow-x: hidden;
+  background: white;
 }
 
-/* Opening Screen */
+/* Opening screen */
 #startScreen {
   position: fixed;
   inset: 0;
   background: linear-gradient(135deg, #a8e063, #56ab2f);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
   z-index: 100;
 }
@@ -32,15 +31,14 @@ body {
   font-family: 'Playfair Display', serif;
   font-size: 3rem;
   color: white;
-  margin-top: 20px;
 }
 
 .envelope {
   width: 90px;
   height: 60px;
   background: white;
+  border-radius: 8px;
   position: relative;
-  border-radius: 6px;
 }
 
 .envelope:before {
@@ -53,42 +51,38 @@ body {
   border-top: 30px solid #e0e0e0;
 }
 
-/* Main Content */
+/* Main content */
 #mainContent {
   display: none;
 }
 
-/* Full‑screen pyramid grid layout */
+/* Full viewport pyramid grid */
 .collage {
   display: grid;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 12% 18% 30% 18% 12%;
-  gap: 5px;
-  box-sizing: border-box;
-  padding: 5px;
+  grid-template-rows: 10% 20% 30% 20% 10%;
+  gap: 0px;
 }
 
-/* Place photos in pyramid positions */
 .collage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  border-radius: 0px;
 }
 
-/* Row assignments */
+/* Photo positions */
 .photo1 { grid-column: 1 / span 2; grid-row: 1; }
-.photo2 { grid-column: 1 / 2;        grid-row: 2; }
-.photo3 { grid-column: 2 / 3;        grid-row: 2; }
-.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* big center */
-.photo4 { grid-column: 1 / 2;        grid-row: 4; }
-.photo5 { grid-column: 2 / 3;        grid-row: 4; }
+.photo2 { grid-column: 1;        grid-row: 2; }
+.photo3 { grid-column: 2;        grid-row: 2; }
+.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* center large */
+.photo4 { grid-column: 1;        grid-row: 4; }
+.photo5 { grid-column: 2;        grid-row: 4; }
 .photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
-/* Letter below collage */
+/* Letter */
 .letter {
   max-width: 900px;
   margin: 20px auto 80px auto;
@@ -110,7 +104,7 @@ body {
   height: 32px;
   background: url('https://i.imgur.com/gXaNddC.png') center/contain no-repeat;
   pointer-events: none;
-  z-index: 20;
+  z-index: 50;
 }
 
 /* Leaves falling from top of *screen* */
@@ -121,11 +115,24 @@ body {
   background: url('https://i.imgur.com/46e8VzS.png') center/contain no-repeat;
   pointer-events: none;
   opacity: 0.8;
-  z-index: 18;
+  z-index: 45;
+}
+
+/* Mobile stacking */
+@media (max-width: 600px) {
+  .collage {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(7, 1fr);
+  }
+  .photo1, .photo7, .photo6 {
+    grid-column: 1;
+  }
+  .photo2, .photo3, .photo4, .photo5 {
+    grid-column: 1;
+  }
 }
 </style>
 </head>
-
 <body>
 
 <div id="startScreen">
@@ -138,10 +145,10 @@ body {
     <img src="photo1.jpeg" class="photo1">
     <img src="photo2.jpeg" class="photo2">
     <img src="photo3.jpeg" class="photo3">
-    <img src="photo7.jpeg" class="photo7">
     <img src="photo4.jpeg" class="photo4">
     <img src="photo5.jpeg" class="photo5">
     <img src="photo6.jpeg" class="photo6">
+    <img src="photo7.jpeg" class="photo7">
   </div>
 
   <div class="letter">
@@ -165,11 +172,11 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Frogs falling from top of screen */
+/* Frogs falling from *top of screen* */
 function createFrogs() {
   const count = window.innerWidth < 600 ? 25 : 60;
   for (let i = 0; i < count; i++) {
-    spawnFrog(Math.random() * window.innerWidth, -50);
+    spawnFrog(Math.random() * window.innerWidth, -80);
   }
 
   function spawnFrog(x, y) {
@@ -177,42 +184,36 @@ function createFrogs() {
     frog.classList.add("frog");
     frog.x = x;
     frog.y = y;
+    frog.vx = (Math.random() - 0.5) * 1.5;
     frog.vy = 1 + Math.random() * 1.8;
-    frog.vx = (Math.random() - 0.5) * 1.2;
     document.body.appendChild(frog);
 
     function animate() {
       frog.y += frog.vy;
       frog.x += frog.vx;
       frog.style.transform = `translate(${frog.x}px, ${frog.y}px)`;
-
-      if (frog.y < window.innerHeight + 40) {
-        requestAnimationFrame(animate);
-      }
+      if (frog.y < window.innerHeight + 50) requestAnimationFrame(animate);
     }
     animate();
   }
 }
 
-/* Leaves falling from top of screen */
+/* Leaves falling from *top of screen* */
 function createLeaves() {
   const count = window.innerWidth < 600 ? 12 : 18;
   for (let i = 0; i < count; i++) {
     const leaf = document.createElement("div");
     leaf.classList.add("leaf");
     leaf.x = Math.random() * window.innerWidth;
-    leaf.y = -30;
-    leaf.speed = 0.4 + Math.random() * 0.8;
+    leaf.y = -60;
+    leaf.speed = 0.3 + Math.random() * 0.8;
     document.body.appendChild(leaf);
 
     function animateLeaf() {
       leaf.y += leaf.speed;
-      leaf.x += Math.sin(leaf.y * .01) * 1.2;
+      leaf.x += Math.sin(leaf.y * 0.01) * 1.2;
       leaf.style.transform = `translate(${leaf.x}px, ${leaf.y}px)`;
-
-      if (leaf.y < window.innerHeight + 30) {
-        requestAnimationFrame(animateLeaf);
-      }
+      if (leaf.y < window.innerHeight + 60) requestAnimationFrame(animateLeaf);
     }
     animateLeaf();
   }
