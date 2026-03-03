@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open Letter 💌</title>
-
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family:'Poppins',sans-serif;
   background:#000;
   overflow:hidden;
   text-align:center;
@@ -27,15 +25,10 @@ body {
   color:white;
   cursor:pointer;
 }
-
 .envelope { font-size:60px; margin-bottom:20px; }
 
-#content {
-  display:none;
-  position:relative;
-  height:100vh;
-  width:100vw;
-}
+/* CONTENT */
+#content { display:none; position:relative; height:100vh; width:100vw; }
 
 /* PANELS */
 .panel {
@@ -44,36 +37,18 @@ body {
   height:100%;
   padding:20px;
   opacity:0;
-  transition:opacity 0.6s ease;
+  transition:opacity 0.6s ease, transform 0.6s ease;
   overflow-y:auto;
+  transform: translateY(0);
 }
-
-.panel.active {
-  opacity:1;
-  z-index:2;
-}
+.panel.active { opacity:1; z-index:2; }
 
 /* GRID */
-.grid {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.grid img {
-  width:100%;
-  height:180px;
-  object-fit:cover;
-  border-radius:18px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.4);
-}
+.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; transition:transform 0.6s ease; }
+.grid img { width:100%; height:180px; object-fit:cover; border-radius:18px; box-shadow:0 8px 20px rgba(0,0,0,0.4); }
 
 /* CAPTION */
-.caption {
-  margin-top:20px;
-  font-size:18px;
-  color:white;
-}
+.caption { margin-top:20px; font-size:18px; color:white; }
 
 /* LETTER */
 .letter {
@@ -84,39 +59,46 @@ body {
   border-radius:18px;
   font-size:17px;
   line-height:1.6;
+  opacity:0;
+  transition: opacity 1.5s ease;
 }
 
-/* ANIMATION LAYERS */
-.animLayer {
+/* SWIPE INDICATORS */
+#indicators {
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:5;
+  bottom:15px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  z-index:10;
 }
+.dot {
+  width:10px; height:10px;
+  border-radius:50%;
+  background:white;
+  opacity:0.3;
+  transition:opacity 0.3s;
+}
+.dot.active { opacity:1; }
 
-.fall {
-  position:absolute;
-  top:-60px;
-  animation:fall linear infinite;
-}
+/* FALLING ITEMS (PARALLAX) */
+.animLayer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:5; }
 
-@keyframes fall {
-  to { transform:translateY(110vh) rotate(360deg); }
-}
+/* multiple depth layers for parallax */
+.fall { position:absolute; top:-60px; animation:fall linear infinite, sway ease-in-out infinite alternate; transform:translate3d(0,0,0); }
+.fall.depth1 { animation-duration:3s; }  /* closest, faster */
+.fall.depth2 { animation-duration:5s; }  /* mid */
+.fall.depth3 { animation-duration:7s; }  /* far, slower */
 
-.balloon {
-  position:absolute;
-  bottom:-80px;
-  animation:floatUp linear infinite;
-}
+/* sway */
+@keyframes sway { 0% { transform:translateX(0); } 50% { transform:translateX(15px); } 100% { transform:translateX(0); } }
+@keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
 
-@keyframes floatUp {
-  to { transform:translateY(-120vh); }
-}
+/* balloons */
+.balloon { position:absolute; bottom:-80px; animation:floatUp linear infinite; transform:translate3d(0,0,0);}
+@keyframes floatUp { to { transform:translateY(-120vh); } }
+
 </style>
 </head>
 <body>
@@ -128,131 +110,152 @@ body {
 
 <div id="content">
 
-<!-- Animation Layers -->
-<div id="frogsLayer" class="animLayer"></div>
-<div id="strawLayer" class="animLayer"></div>
-<div id="balloonLayer" class="animLayer"></div>
+  <!-- Animation Layers -->
+  <div id="frogsLayer" class="animLayer"></div>
+  <div id="strawLayer" class="animLayer"></div>
+  <div id="balloonLayer" class="animLayer"></div>
 
-<!-- PANEL 1 -->
-<div class="panel active">
-  <div class="grid">
-    <img src="photo8.jpeg">
-    <img src="photo9.jpeg">
-    <img src="photo10.jpeg">
-    <img src="photo11.jpeg">
+  <!-- PANEL 1 -->
+  <div class="panel active">
+    <div class="grid">
+      <img src="photo8.jpeg">
+      <img src="photo9.jpeg">
+      <img src="photo10.jpeg">
+      <img src="photo11.jpeg">
+    </div>
+    <div class="caption">Our beautiful memories ❤️</div>
   </div>
-  <div class="caption">Our beautiful memories ❤️</div>
-</div>
 
-<!-- PANEL 2 -->
-<div class="panel">
-  <div class="grid">
-    <img src="photo12.jpeg">
-    <img src="photo13.jpeg">
-    <img src="photo14.jpeg">
-    <img src="photo15.jpeg">
+  <!-- PANEL 2 -->
+  <div class="panel">
+    <div class="grid">
+      <img src="photo12.jpeg">
+      <img src="photo13.jpeg">
+      <img src="photo14.jpeg">
+      <img src="photo15.jpeg">
+    </div>
+    <div class="caption">More adventures together ✨</div>
   </div>
-  <div class="caption">More adventures together ✨</div>
-</div>
 
-<!-- FINAL PANEL -->
-<div class="panel">
-  <div class="grid">
-    <img src="photo2.jpeg">
-    <img src="photo3.jpeg">
-    <img src="photo4.jpeg">
-    <img src="photo5.jpeg">
+  <!-- FINAL PANEL -->
+  <div class="panel">
+    <div class="grid">
+      <img src="photo2.jpeg">
+      <img src="photo3.jpeg">
+      <img src="photo4.jpeg">
+      <img src="photo5.jpeg">
+    </div>
+    <div class="letter" id="finalLetter">
+      My love,<br><br>
+      Happy Birthday ❤️<br><br>
+      Every photo here is a reminder of how lucky I am.
+      You make my world brighter every single day.
+      I love you more than words can ever explain.
+    </div>
   </div>
-  <div class="letter">
-    My love,<br><br>
-    Happy Birthday ❤️<br><br>
-    Every photo here is a reminder of how lucky I am.
-    You make my world brighter every single day.
-    I love you more than words can ever explain.
-  </div>
-</div>
 
+  <!-- Indicators -->
+  <div id="indicators">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
 </div>
 
 <script>
-let current = 0;
-const panels = document.querySelectorAll(".panel");
-const openScreen = document.getElementById("openScreen");
-const content = document.getElementById("content");
+let current=0;
+const panels=document.querySelectorAll(".panel");
+const openScreen=document.getElementById("openScreen");
+const content=document.getElementById("content");
+const dots=document.querySelectorAll(".dot");
+const frogsLayer=document.getElementById("frogsLayer");
+const strawLayer=document.getElementById("strawLayer");
+const balloonLayer=document.getElementById("balloonLayer");
+const finalLetter=document.getElementById("finalLetter");
 
-const frogsLayer = document.getElementById("frogsLayer");
-const strawLayer = document.getElementById("strawLayer");
-const balloonLayer = document.getElementById("balloonLayer");
-
-openScreen.addEventListener("click", () => {
+openScreen.addEventListener("click", ()=>{
   openScreen.style.display="none";
   content.style.display="block";
-  activatePanel(0);
+  toggleAnimations();
 });
 
-/* SWIPE NAVIGATION */
-let startX = 0;
-
-document.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
+/* swipe navigation */
+let startX=0;
+document.addEventListener("touchstart", e=>{ startX=e.touches[0].clientX; });
+document.addEventListener("touchend", e=>{
+  let endX=e.changedTouches[0].clientX;
+  if(startX-endX>50) nextPanel();
+  if(endX-startX>50) prevPanel();
 });
 
-document.addEventListener("touchend", e => {
-  let endX = e.changedTouches[0].clientX;
-  if(startX - endX > 50) nextPanel();
-  if(endX - startX > 50) prevPanel();
-});
-
-function nextPanel(){
-  if(current < panels.length-1){
-    activatePanel(current+1);
-  }
-}
-
-function prevPanel(){
-  if(current > 0){
-    activatePanel(current-1);
-  }
-}
+function nextPanel(){ if(current<panels.length-1) activatePanel(current+1);}
+function prevPanel(){ if(current>0) activatePanel(current-1);}
 
 function activatePanel(index){
   panels[current].classList.remove("active");
-  current = index;
+  current=index;
   panels[current].classList.add("active");
+  dots.forEach(d=>d.classList.remove("active"));
+  dots[current].classList.add("active");
+
+  if(current===2) finalLetter.style.opacity="1";
+  else finalLetter.style.opacity="0";
+
+  // parallax: subtle grid shift
+  panels.forEach((p,i)=>{
+    const grid=p.querySelector(".grid");
+    if(grid) grid.style.transform = i===current ? "translateY(0px)" : "translateY(15px)";
+  });
+
   toggleAnimations();
 }
 
-/* CSS-ONLY ANIMATION GENERATOR (one-time creation) */
-function generateFalling(layer, emoji, count, type="fall"){
+/* generate CSS-only falling items with depth */
+function generateFalling(layer,emoji,count){
+  const depths=['depth1','depth2','depth3'];
   for(let i=0;i<count;i++){
     const el=document.createElement("div");
     el.textContent=emoji;
-    el.className=type;
-    el.style.left=Math.random()*100+"vw";
-    el.style.fontSize=(20+Math.random()*20)+"px";
-    el.style.animationDuration=(4+Math.random()*4)+"s";
-    el.style.animationDelay=(Math.random()*5)+"s";
+    el.className='fall '+depths[i%3];
+    el.style.left=Math.random()*100+'vw';
+    el.style.fontSize=(20+Math.random()*20)+'px';
+    el.style.animationDelay=(Math.random()*5)+'s';
     layer.appendChild(el);
   }
 }
 
-/* Generate once */
-generateFalling(frogsLayer,"🐸",20,"fall");
-generateFalling(strawLayer,"🍓",20,"fall");
-generateFalling(balloonLayer,"🎈",15,"balloon");
-
-/* Control visibility */
-function toggleAnimations(){
-  frogsLayer.style.display = current===0 ? "block":"none";
-  strawLayer.style.display = current===1 ? "block":"none";
-  balloonLayer.style.display = current===2 ? "block":"none";
+/* balloons */
+function generateBalloons(layer,count){
+  const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
+  for(let i=0;i<count;i++){
+    const b=document.createElement("div");
+    b.textContent="🎈";
+    b.className="balloon";
+    b.style.left=Math.random()*100+"vw";
+    b.style.fontSize=(28+Math.random()*18)+"px";
+    b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
+    b.style.animationDuration=(8+Math.random()*5)+"s";
+    layer.appendChild(b);
+  }
 }
 
-/* Hide initially */
+/* generate once */
+generateFalling(frogsLayer,"🐸",30);
+generateFalling(strawLayer,"🍓",30);
+generateBalloons(balloonLayer,15);
+
+function toggleAnimations(){
+  frogsLayer.style.display=current===0?"block":"none";
+  strawLayer.style.display=current===1?"block":"none";
+  balloonLayer.style.display=current===2?"block":"none";
+}
+
+/* hide all initially */
 frogsLayer.style.display="none";
 strawLayer.style.display="none";
 balloonLayer.style.display="none";
-</script>
+finalLetter.style.opacity="0";
 
+</script>
 </body>
 </html>
