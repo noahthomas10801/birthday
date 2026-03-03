@@ -62,38 +62,36 @@ body {
 .collage {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  padding-bottom: 60px;
+  height: 100vh; /* Full screen */
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.collage img {
-  position: absolute;
-  border-radius: 16px;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+/* Rows for stacked layout */
+.collage-row {
+  display: flex;
+  width: 100%;
+  flex: 1;
+}
+
+.collage-row img {
+  width: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
-/* Center focal photo */
-.collage img:nth-child(7) {
-  top: 50%;
-  left: 50%;
-  width: 40%;
-  max-height: 60%;
-  transform: translate(-50%, -50%);
-  z-index: 10; /* highest z-index */
+/* Adjust for rows with multiple photos */
+.row-two img {
+  width: 50%;
 }
 
-/* Photos around the center without overlapping */
-.collage img:nth-child(1) { top: 5%; left: 10%; width: 20%; z-index:5; }
-.collage img:nth-child(2) { top: 5%; right: 10%; width: 20%; z-index:5; }
-.collage img:nth-child(3) { top: 35%; left: 5%; width: 20%; z-index:5; }
-.collage img:nth-child(4) { top: 35%; right: 5%; width: 20%; z-index:5; }
-.collage img:nth-child(5) { bottom: 10%; left: 15%; width: 20%; z-index:5; }
-.collage img:nth-child(6) { bottom: 10%; right: 15%; width: 20%; z-index:5; }
+.row-center img {
+  width: 100%;
+}
 
-/* Letter completely below collage */
+/* Letter below collage */
 .letter {
   position: relative;
   display: block;
@@ -113,19 +111,19 @@ body {
 
 /* Frogs */
 .frog {
-  position: absolute;
+  position: fixed;
   width: 30px;
   height: 30px;
   background-image: url('https://i.imgur.com/gXaNddC.png');
   background-size: contain;
   background-repeat: no-repeat;
   pointer-events: none;
-  z-index: 20;
+  z-index: 30;
 }
 
 /* Leaves */
 .leaf {
-  position: absolute;
+  position: fixed;
   width: 25px;
   height: 25px;
   background-image: url('https://i.imgur.com/46e8VzS.png');
@@ -133,40 +131,45 @@ body {
   background-repeat: no-repeat;
   opacity: .7;
   pointer-events: none;
-  z-index: 15;
+  z-index: 28;
 }
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
-  .collage img:nth-child(7) { width: 60%; max-height: 50%; }
-  .collage img:nth-child(1) { width: 35%; top: 5%; left: 5%; }
-  .collage img:nth-child(2) { width: 35%; top: 5%; right: 5%; }
-  .collage img:nth-child(3) { width: 30%; top: 35%; left: 5%; }
-  .collage img:nth-child(4) { width: 30%; top: 35%; right: 5%; }
-  .collage img:nth-child(5) { width: 25%; bottom: 10%; left: 10%; }
-  .collage img:nth-child(6) { width: 25%; bottom: 10%; right: 10%; }
+  .row-two img { width: 50%; }
+  .row-center img { width: 100%; }
 }
 </style>
 </head>
-
 <body>
+
 <div id="startScreen">
   <div class="envelope"></div>
   <h1>Click to Open</h1>
 </div>
 
 <div id="mainContent">
-  <div class="collage fade-in" id="collage">
-    <img src="photo1.jpeg">
-    <img src="photo2.jpeg">
-    <img src="photo3.jpeg">
-    <img src="photo4.jpeg">
-    <img src="photo5.jpeg">
-    <img src="photo6.jpeg">
-    <img src="photo7.jpeg">
+  <div class="collage" id="collage">
+    <div class="collage-row row-one">
+      <img src="photo1.jpeg">
+    </div>
+    <div class="collage-row row-two">
+      <img src="photo2.jpeg">
+      <img src="photo3.jpeg">
+    </div>
+    <div class="collage-row row-center">
+      <img src="photo7.jpeg">
+    </div>
+    <div class="collage-row row-two">
+      <img src="photo4.jpeg">
+      <img src="photo5.jpeg">
+    </div>
+    <div class="collage-row row-one">
+      <img src="photo6.jpeg">
+    </div>
   </div>
 
-  <div class="letter fade-in" id="letter">
+  <div class="letter" id="letter">
     My love,<br><br>
     Every moment with you feels like magic.
     You are my favorite memory, my favorite laugh,
@@ -188,13 +191,12 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Frogs falling from top of collage */
+/* Frogs falling from top of page */
 function createFrogs() {
   const frogCount = window.innerWidth < 600 ? 20 : 50;
-  const rect = collage.getBoundingClientRect();
 
   for (let i = 0; i < frogCount; i++) {
-    spawnFrog(rect.left + Math.random() * rect.width, rect.top - 50);
+    spawnFrog(Math.random() * window.innerWidth, -50);
   }
 
   function spawnFrog(x, y) {
@@ -215,32 +217,31 @@ function createFrogs() {
 
       frog.style.transform = `translate(${frog.x}px, ${frog.y}px) rotate(${frog.rotation}deg)`;
 
-      if (frog.y < rect.bottom) requestAnimationFrame(animate);
+      if (frog.y < window.innerHeight) requestAnimationFrame(animate);
     }
 
     animate();
   }
 }
 
-/* Leaves falling from top of collage */
+/* Leaves falling from top of page */
 function createLeaves() {
   const leafCount = window.innerWidth < 600 ? 10 : 15;
-  const rect = collage.getBoundingClientRect();
 
   for (let i = 0; i < leafCount; i++) {
     const leaf = document.createElement("div");
     leaf.classList.add("leaf");
-    leaf.x = rect.left + Math.random() * rect.width;
-    leaf.y = rect.top - 20;
+    leaf.x = Math.random() * window.innerWidth;
+    leaf.y = -20;
     leaf.speed = 0.3 + Math.random();
     document.body.appendChild(leaf);
 
     function animateLeaf() {
       leaf.y += leaf.speed;
       leaf.x += Math.sin(leaf.y * 0.01);
-      if (leaf.y > rect.bottom) {
-        leaf.y = rect.top - 20;
-        leaf.x = rect.left + Math.random() * rect.width;
+      if (leaf.y > window.innerHeight) {
+        leaf.y = -20;
+        leaf.x = Math.random() * window.innerWidth;
       }
       leaf.style.transform = `translate(${leaf.x}px, ${leaf.y}px)`;
       requestAnimationFrame(animateLeaf);
@@ -250,5 +251,6 @@ function createLeaves() {
   }
 }
 </script>
+
 </body>
 </html>
