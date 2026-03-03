@@ -64,39 +64,32 @@ body {
   width: 100%;
   height: 100vh; /* Full screen */
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
-/* Rows for stacked layout */
-.collage-row {
-  display: flex;
-  width: 100%;
-  flex: 1;
-}
-
-.collage-row img {
-  width: 100%;
+/* Photos styling */
+.collage img {
+  position: absolute;
   object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
 }
 
-/* Adjust for rows with multiple photos */
-.row-two img {
-  width: 50%;
-}
+/* Layout with slight overlaps */
+.collage img:nth-child(1) { top: 0%; left: 35%; width: 30%; z-index:1; }
+.collage img:nth-child(2) { top: 20%; left: 5%; width: 30%; z-index:2; }
+.collage img:nth-child(3) { top: 20%; right: 5%; width: 30%; z-index:2; }
+.collage img:nth-child(7) { top: 35%; left: 20%; width: 60%; z-index:5; }
+.collage img:nth-child(4) { bottom: 20%; left: 5%; width: 30%; z-index:2; }
+.collage img:nth-child(5) { bottom: 20%; right: 5%; width: 30%; z-index:2; }
+.collage img:nth-child(6) { bottom: 0%; left: 35%; width: 30%; z-index:1; }
 
-.row-center img {
-  width: 100%;
-}
-
-/* Letter below collage */
+/* Letter completely below collage */
 .letter {
   position: relative;
   display: block;
   max-width: 900px;
-  margin: 60px auto 80px auto;
+  margin: 20px auto 80px auto;
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
   font-weight: 600;
@@ -136,8 +129,13 @@ body {
 
 /* Mobile adjustments */
 @media (max-width: 600px) {
-  .row-two img { width: 50%; }
-  .row-center img { width: 100%; }
+  .collage img:nth-child(1) { top: 0%; left: 25%; width: 50%; }
+  .collage img:nth-child(2) { top: 20%; left: 5%; width: 45%; }
+  .collage img:nth-child(3) { top: 20%; right: 5%; width: 45%; }
+  .collage img:nth-child(7) { top: 35%; left: 10%; width: 80%; }
+  .collage img:nth-child(4) { bottom: 20%; left: 5%; width: 45%; }
+  .collage img:nth-child(5) { bottom: 20%; right: 5%; width: 45%; }
+  .collage img:nth-child(6) { bottom: 0%; left: 25%; width: 50%; }
 }
 </style>
 </head>
@@ -150,23 +148,13 @@ body {
 
 <div id="mainContent">
   <div class="collage" id="collage">
-    <div class="collage-row row-one">
-      <img src="photo1.jpeg">
-    </div>
-    <div class="collage-row row-two">
-      <img src="photo2.jpeg">
-      <img src="photo3.jpeg">
-    </div>
-    <div class="collage-row row-center">
-      <img src="photo7.jpeg">
-    </div>
-    <div class="collage-row row-two">
-      <img src="photo4.jpeg">
-      <img src="photo5.jpeg">
-    </div>
-    <div class="collage-row row-one">
-      <img src="photo6.jpeg">
-    </div>
+    <img src="photo1.jpeg">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo4.jpeg">
+    <img src="photo5.jpeg">
+    <img src="photo6.jpeg">
+    <img src="photo7.jpeg">
   </div>
 
   <div class="letter" id="letter">
@@ -181,7 +169,6 @@ body {
 <script>
 const startScreen = document.getElementById("startScreen");
 const mainContent = document.getElementById("mainContent");
-const collage = document.getElementById("collage");
 
 startScreen.addEventListener("click", () => {
   startScreen.style.display = "none";
