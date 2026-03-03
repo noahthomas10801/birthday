@@ -10,9 +10,9 @@
 <style>
 body {
   margin: 0;
-  overflow: hidden;
   font-family: 'Inter', sans-serif;
-  background: #fff; /* base background for safety */
+  background: #fff;
+  overflow-x: hidden;
 }
 
 /* Opening Screen */
@@ -56,26 +56,13 @@ body {
 /* Main Content */
 #mainContent {
   display: none;
-  width: 100%;
-  height: 100vh; /* full viewport for collage */
-  position: relative;
-}
-
-/* Fade-in animation */
-.fade-in {
-  opacity: 0;
-  transition: opacity 1.2s ease;
-}
-
-.fade-in.show {
-  opacity: 1;
 }
 
 /* Collage */
 .collage {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh; /* full screen for collage */
 }
 
 .collage img {
@@ -104,23 +91,20 @@ body {
 .collage img:nth-child(5) { top: 35%; left: 20%; width: 20%; transform: rotate(-6deg); }
 .collage img:nth-child(6) { top: 25%; left: 30%; width: 20%; transform: rotate(4deg); }
 
-/* Letter text */
+/* Letter text underneath collage */
 .letter {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   max-width: 90%;
+  margin: 30px auto 60px auto;
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
   font-weight: 600;
   line-height: 1.8;
   color: #1b4332;
   padding: 15px;
-  background: linear-gradient(135deg, #c8f7c5, #56c596);
+  background: linear-gradient(135deg, #c8f7c5, #56ab2f);
   border-radius: 12px;
-  z-index: 20;
   text-align: center;
+  z-index: 20;
 }
 
 /* Sparkles */
@@ -133,7 +117,7 @@ body {
   pointer-events: none;
   opacity: 0;
   animation: sparkleAnim 1.5s ease-out forwards;
-  z-index: 10;
+  z-index: 25;
 }
 
 @keyframes sparkleAnim {
@@ -151,7 +135,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   pointer-events: none;
-  z-index: 5;
+  z-index: 30; /* above collage and leaves */
 }
 
 /* Leaves */
@@ -164,7 +148,7 @@ body {
   background-repeat: no-repeat;
   opacity: .7;
   pointer-events: none;
-  z-index: 4;
+  z-index: 28; /* below frogs, above collage */
 }
 
 /* Mobile adjustments */
@@ -255,10 +239,10 @@ function createSparkles() {
 
 /* Frogs */
 function createFrogs() {
-  const frogCount = window.innerWidth < 600 ? 30 : 70;
+  const frogCount = window.innerWidth < 600 ? 20 : 70;
 
   for (let i = 0; i < frogCount; i++) {
-    spawnFrog(Math.random() * window.innerWidth, Math.random() * window.innerHeight);
+    spawnFrog(Math.random() * window.innerWidth, Math.random() * window.innerHeight * 0.9);
   }
 
   setInterval(() => {
@@ -314,13 +298,14 @@ function createFrogs() {
 
 /* Leaves */
 function createLeaves() {
-  for (let i = 0; i < 15; i++) {
+  const leafCount = window.innerWidth < 600 ? 10 : 15;
+
+  for (let i = 0; i < leafCount; i++) {
     const leaf = document.createElement("div");
     leaf.classList.add("leaf");
     leaf.x = Math.random() * window.innerWidth;
-    leaf.y = Math.random() * window.innerHeight;
+    leaf.y = Math.random() * window.innerHeight * 0.9;
     leaf.speed = 0.3 + Math.random();
-
     document.body.appendChild(leaf);
 
     function animateLeaf() {
