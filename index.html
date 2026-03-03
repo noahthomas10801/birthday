@@ -62,8 +62,9 @@ body {
 .collage {
   position: relative;
   width: 100%;
-  min-height: 100vh; /* full screen but can grow */
+  min-height: 100vh;
   padding-bottom: 60px; /* space for letter */
+  overflow: hidden; /* prevent elements outside from showing */
 }
 
 .collage img {
@@ -85,12 +86,13 @@ body {
   z-index: 8;
 }
 
-.collage img:nth-child(1) { top: 10%; left: 5%; width: 25%; transform: rotate(-6deg); }
-.collage img:nth-child(2) { top: 15%; right: 5%; width: 25%; transform: rotate(8deg); }
-.collage img:nth-child(3) { bottom: 25%; left: 10%; width: 25%; transform: rotate(-5deg); }
-.collage img:nth-child(4) { bottom: 20%; right: 12%; width: 25%; transform: rotate(7deg); }
-.collage img:nth-child(5) { top: 35%; left: 20%; width: 20%; transform: rotate(-6deg); }
-.collage img:nth-child(6) { top: 25%; left: 30%; width: 20%; transform: rotate(4deg); }
+/* Spread photos 3,4,5,6 around center without overlap */
+.collage img:nth-child(1) { top: 5%; left: 5%; width: 25%; transform: rotate(-6deg); }
+.collage img:nth-child(2) { top: 10%; right: 5%; width: 25%; transform: rotate(6deg); }
+.collage img:nth-child(3) { bottom: 40%; left: 10%; width: 20%; transform: rotate(-4deg); }
+.collage img:nth-child(4) { bottom: 35%; right: 10%; width: 20%; transform: rotate(5deg); }
+.collage img:nth-child(5) { top: 30%; left: 20%; width: 20%; transform: rotate(-5deg); }
+.collage img:nth-child(6) { top: 25%; right: 20%; width: 20%; transform: rotate(4deg); }
 
 /* Letter completely below collage */
 .letter {
@@ -159,10 +161,10 @@ body {
   .collage img:nth-child(7) { width: 60%; max-height: 50%; }
   .collage img:nth-child(1) { width: 40%; top: 5%; left: 5%; }
   .collage img:nth-child(2) { width: 40%; top: 10%; right: 5%; }
-  .collage img:nth-child(3) { width: 35%; bottom: 30%; left: 5%; }
-  .collage img:nth-child(4) { width: 35%; bottom: 25%; right: 5%; }
+  .collage img:nth-child(3) { width: 35%; bottom: 45%; left: 5%; }
+  .collage img:nth-child(4) { width: 35%; bottom: 40%; right: 5%; }
   .collage img:nth-child(5) { width: 30%; top: 30%; left: 10%; }
-  .collage img:nth-child(6) { width: 30%; top: 25%; left: 20%; }
+  .collage img:nth-child(6) { width: 30%; top: 25%; right: 15%; }
 }
 </style>
 </head>
@@ -203,7 +205,6 @@ startScreen.addEventListener("click", () => {
 
   setTimeout(() => {
     document.getElementById("collage").classList.add("show");
-    createSparkles();
   }, 200);
 
   setTimeout(() => {
@@ -214,33 +215,7 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Sparkles */
-function createSparkles() {
-  const collage = document.getElementById("collage");
-  const rect = collage.getBoundingClientRect();
-  const sparkleCount = 50;
-
-  for (let i = 0; i < sparkleCount; i++) {
-    const sparkle = document.createElement("div");
-    sparkle.classList.add("sparkle");
-
-    let x, y;
-    const edge = Math.floor(Math.random() * 4);
-
-    if (edge === 0) { x = rect.left + Math.random() * rect.width; y = rect.top - 10; }
-    if (edge === 1) { x = rect.left + Math.random() * rect.width; y = rect.bottom + 10; }
-    if (edge === 2) { x = rect.left - 10; y = rect.top + Math.random() * rect.height; }
-    if (edge === 3) { x = rect.right + 10; y = rect.top + Math.random() * rect.height; }
-
-    sparkle.style.left = x + "px";
-    sparkle.style.top = y + "px";
-
-    document.body.appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 1500);
-  }
-}
-
-/* Frogs falling from top */
+/* Frogs falling from top over collage */
 function createFrogs() {
   const frogCount = window.innerWidth < 600 ? 20 : 50;
 
@@ -266,18 +241,14 @@ function createFrogs() {
 
     function animate() {
       frog.time += frog.jumpSpeed;
-      if (Math.random() < 0.005) frog.spinSpeed = (Math.random() - 0.5) * 20;
+      const jumpSin = Math.sin(frog.time);
+      const jumpOffset = jumpSin * frog.jumpHeight;
+      const scaleY = 1 + jumpSin * 0.3;
+      const scaleX = 1 - jumpSin * 0.2;
+      frog.rotation += frog.spinSpeed;
 
       frog.x += frog.vx;
       frog.y += frog.vy;
-
-      const jumpSin = Math.sin(frog.time);
-      const jumpOffset = jumpSin * frog.jumpHeight;
-
-      const scaleY = 1 + jumpSin * 0.3;
-      const scaleX = 1 - jumpSin * 0.2;
-
-      frog.rotation += frog.spinSpeed;
 
       frog.style.transform =
         `translate(${frog.x}px, ${frog.y - jumpOffset}px)
@@ -291,7 +262,7 @@ function createFrogs() {
   }
 }
 
-/* Leaves falling from top */
+/* Leaves falling from top over collage */
 function createLeaves() {
   const leafCount = window.innerWidth < 600 ? 10 : 15;
 
