@@ -39,12 +39,11 @@ body {
   opacity:0;
   transition:opacity 0.6s ease, transform 0.6s ease;
   overflow-y:auto;
-  transform: translateY(0);
 }
 .panel.active { opacity:1; z-index:2; }
 
 /* GRID */
-.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; transition:transform 0.6s ease; }
+.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; }
 .grid img { width:100%; height:180px; object-fit:cover; border-radius:18px; box-shadow:0 8px 20px rgba(0,0,0,0.4); }
 
 /* CAPTION */
@@ -82,23 +81,51 @@ body {
 }
 .dot.active { opacity:1; }
 
-/* FALLING ITEMS (PARALLAX) */
-.animLayer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:5; }
+/* FALLING ITEMS */
+.animLayer {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:5;
+}
 
-/* multiple depth layers for parallax */
-.fall { position:absolute; top:-60px; animation:fall linear infinite, sway ease-in-out infinite alternate; transform:translate3d(0,0,0); }
-.fall.depth1 { animation-duration:3s; }  /* closest, faster */
-.fall.depth2 { animation-duration:5s; }  /* mid */
-.fall.depth3 { animation-duration:7s; }  /* far, slower */
+/* falling item base */
+.fallItem {
+  position:absolute;
+  top:-60px;
+  width:40px;
+  height:40px;
+  transform:translate3d(0,0,0);
+  animation-name:fall,sway;
+  animation-timing-function:linear,ease-in-out;
+  animation-iteration-count:infinite,infinite;
+}
 
-/* sway */
-@keyframes sway { 0% { transform:translateX(0); } 50% { transform:translateX(15px); } 100% { transform:translateX(0); } }
-@keyframes fall { to { transform:translateY(110vh) rotate(360deg); } }
+/* sway animation */
+@keyframes sway {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(15px); }
+  100% { transform: translateX(0); }
+}
 
-/* balloons */
-.balloon { position:absolute; bottom:-80px; animation:floatUp linear infinite; transform:translate3d(0,0,0);}
+/* vertical fall animation */
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* balloon */
+.balloon {
+  position:absolute;
+  bottom:-80px;
+  width:50px;
+  height:50px;
+  transform:translate3d(0,0,0);
+  animation:floatUp linear infinite;
+}
 @keyframes floatUp { to { transform:translateY(-120vh); } }
-
 </style>
 </head>
 <body>
@@ -201,30 +228,25 @@ function activatePanel(index){
   if(current===2) finalLetter.style.opacity="1";
   else finalLetter.style.opacity="0";
 
-  // parallax: subtle grid shift
-  panels.forEach((p,i)=>{
-    const grid=p.querySelector(".grid");
-    if(grid) grid.style.transform = i===current ? "translateY(0px)" : "translateY(15px)";
-  });
-
   toggleAnimations();
 }
 
-/* generate CSS-only falling items with depth */
-function generateFalling(layer,emoji,count){
-  const depths=['depth1','depth2','depth3'];
+/* Create falling images */
+function generateFallingImage(layer,src,count){
   for(let i=0;i<count;i++){
-    const el=document.createElement("div");
-    el.textContent=emoji;
-    el.className='fall '+depths[i%3];
-    el.style.left=Math.random()*100+'vw';
-    el.style.fontSize=(20+Math.random()*20)+'px';
-    el.style.animationDelay=(Math.random()*5)+'s';
-    layer.appendChild(el);
+    const img=document.createElement("img");
+    img.src=src;
+    img.className="fallItem";
+    img.style.left=Math.random()*100+"vw";
+    img.style.width=30+Math.random()*20+"px";
+    img.style.height=30+Math.random()*20+"px";
+    img.style.animationDuration=(4+Math.random()*4)+"s, "+(2+Math.random()*2)+"s";
+    img.style.animationDelay=Math.random()*5+"s";
+    layer.appendChild(img);
   }
 }
 
-/* balloons */
+/* Balloons */
 function generateBalloons(layer,count){
   const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
   for(let i=0;i<count;i++){
@@ -239,9 +261,9 @@ function generateBalloons(layer,count){
   }
 }
 
-/* generate once */
-generateFalling(frogsLayer,"🐸",30);
-generateFalling(strawLayer,"🍓",30);
+/* Generate once with PNGs */
+generateFallingImage(frogsLayer,"frog.png",25);        // use small frog PNG in repo
+generateFallingImage(strawLayer,"strawberry.png",25);  // use small strawberry PNG in repo
 generateBalloons(balloonLayer,15);
 
 function toggleAnimations(){
@@ -250,12 +272,12 @@ function toggleAnimations(){
   balloonLayer.style.display=current===2?"block":"none";
 }
 
-/* hide all initially */
+/* hide initially */
 frogsLayer.style.display="none";
 strawLayer.style.display="none";
 balloonLayer.style.display="none";
 finalLetter.style.opacity="0";
-
 </script>
+
 </body>
 </html>
