@@ -163,7 +163,7 @@ body {
   z-index: 4;
 }
 
-/* Mobile adjustments */
+/* Mobile "scrapbook" adjustments */
 @media (max-width: 600px) {
   #startScreen h1 { font-size: 2rem; }
   .letter { font-size: 1.2rem; line-height: 1.6; padding: 12px; }
@@ -171,24 +171,25 @@ body {
   .collage {
     position: relative;
     height: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
   }
 
   .collage img {
-    position: relative;
-    transform: none !important;
-    width: 45%;
+    position: absolute;
+    width: 40%;
     height: auto;
     max-height: 200px;
+    object-fit: cover;
+    border-radius: 16px;
   }
 
-  .collage img:nth-child(7) {
-    width: 90%;
-    max-height: 300px;
-  }
+  /* Staggered scrapbook layout for mobile */
+  .collage img:nth-child(1) { top: 0; left: 5%; transform: rotate(-8deg); }
+  .collage img:nth-child(2) { top: 50px; right: 5%; transform: rotate(6deg); }
+  .collage img:nth-child(3) { top: 120px; left: 10%; transform: rotate(-5deg); }
+  .collage img:nth-child(4) { top: 170px; right: 12%; transform: rotate(7deg); }
+  .collage img:nth-child(5) { top: 250px; left: 20%; transform: rotate(-6deg); }
+  .collage img:nth-child(6) { top: 200px; left: 30%; transform: rotate(4deg); }
+  .collage img:nth-child(7) { top: 280px; left: 50%; width: 60%; transform: translateX(-50%) rotate(-2deg); }
 }
 </style>
 </head>
@@ -241,7 +242,7 @@ startScreen.addEventListener("click", () => {
   createLeaves();
 });
 
-/* Edge Sparkles */
+/* Sparkles */
 function createSparkles() {
   const collage = document.getElementById("collage");
   const rect = collage.getBoundingClientRect();
