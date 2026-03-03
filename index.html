@@ -6,170 +6,161 @@
 <title>Open Letter 💌</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   font-family: 'Poppins', sans-serif;
-  background: #000;
-  overflow-x: hidden;
-  text-align: center;
+  background:#000;
+  overflow-x:hidden;
+  text-align:center;
 }
 
 /* OPEN SCREEN */
 #openScreen {
-  height: 100vh;
-  background: linear-gradient(135deg, #0f3d1e, #1f6f3a);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  cursor: pointer;
+  height:100vh;
+  background:linear-gradient(135deg,#0f3d1e,#1f6f3a);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  cursor:pointer;
 }
 
-#openScreen h1 {
-  font-size: 32px;
-  font-weight: 700;
-}
+.envelope { font-size:60px; margin-bottom:20px; }
 
-.envelope {
-  font-size: 60px;
-  margin-bottom: 20px;
-}
+#content { display:none; }
 
 /* PANELS */
-.panel {
-  display: none;
-  padding: 20px 15px 40px;
-}
-
-.panel.active {
-  display: block;
-}
+.panel { display:none; padding:20px 15px 40px; }
+.panel.active { display:block; }
 
 /* GRID */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
 }
 
 .grid img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-radius: 18px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* CAPTION */
 .caption {
-  margin-top: 20px;
-  font-size: 18px;
-  color: white;
+  margin-top:20px;
+  font-size:18px;
+  color:white;
 }
 
 /* LETTER */
 .letter {
-  margin-top: 30px;
-  padding: 25px;
-  background: linear-gradient(135deg, #2e8b57, #3cb371);
-  color: white;
-  border-radius: 20px;
-  font-size: 18px;
-  line-height: 1.6;
+  margin-top:30px;
+  padding:25px;
+  background:linear-gradient(135deg,#2e8b57,#3cb371);
+  color:white;
+  border-radius:20px;
+  font-size:18px;
+  line-height:1.6;
 }
 
 /* BUTTON */
 .nextBtn {
-  margin-top: 25px;
-  padding: 12px 25px;
-  background: #3cb371;
-  border: none;
-  border-radius: 25px;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  margin-top:25px;
+  padding:12px 25px;
+  background:#3cb371;
+  border:none;
+  border-radius:25px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 
-/* BALLOON FLOAT */
+/* FALLING ITEMS */
+.fallItem {
+  position:fixed;
+  top:-60px;
+  pointer-events:none;
+  z-index:9999;
+  animation:fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform:translateY(110vh) rotate(360deg);
+  }
+}
+
+/* FLOAT BALLOONS */
 .balloon {
-  position: fixed;
-  bottom: -100px;
-  pointer-events: none;
-  z-index: 9999;
-  animation: floatUp linear forwards;
-  filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  position:fixed;
+  bottom:-80px;
+  pointer-events:none;
+  z-index:9999;
+  animation:floatUp linear forwards;
 }
 
 @keyframes floatUp {
-  0% {
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    transform: translateY(-50vh) translateX(25px);
-  }
-  100% {
-    transform: translateY(-120vh) translateX(-25px);
+  to {
+    transform:translateY(-120vh);
   }
 }
 </style>
 </head>
 <body>
 
-<!-- OPEN SCREEN -->
 <div id="openScreen">
   <div class="envelope">✉️</div>
   <h1>Click to Open</h1>
 </div>
 
-<div id="content" style="display:none">
+<div id="content">
 
-  <!-- PANEL 1 -->
-  <div class="panel active">
-    <div class="grid">
-      <img src="photo8.jpeg">
-      <img src="photo9.jpeg">
-      <img src="photo10.jpeg">
-      <img src="photo11.jpeg">
-    </div>
-    <div class="caption">Our beautiful memories ❤️</div>
-    <button class="nextBtn" onclick="nextPanel()">Next</button>
+<!-- PANEL 1 -->
+<div class="panel active">
+  <div class="grid">
+    <img src="photo8.jpeg">
+    <img src="photo9.jpeg">
+    <img src="photo10.jpeg">
+    <img src="photo11.jpeg">
+  </div>
+  <div class="caption">Our beautiful memories ❤️</div>
+  <button class="nextBtn" onclick="nextPanel()">Next</button>
+</div>
+
+<!-- PANEL 2 -->
+<div class="panel">
+  <div class="grid">
+    <img src="photo12.jpeg">
+    <img src="photo13.jpeg">
+    <img src="photo14.jpeg">
+    <img src="photo15.jpeg">
+  </div>
+  <div class="caption">More adventures together ✨</div>
+  <button class="nextBtn" onclick="nextPanel()">Next</button>
+</div>
+
+<!-- FINAL PANEL -->
+<div class="panel">
+  <div class="grid">
+    <img src="photo2.jpeg">
+    <img src="photo3.jpeg">
+    <img src="photo4.jpeg">
+    <img src="photo5.jpeg">
   </div>
 
-  <!-- PANEL 2 -->
-  <div class="panel">
-    <div class="grid">
-      <img src="photo12.jpeg">
-      <img src="photo13.jpeg">
-      <img src="photo14.jpeg">
-      <img src="photo15.jpeg">
-    </div>
-    <div class="caption">More adventures together ✨</div>
-    <button class="nextBtn" onclick="nextPanel()">Next</button>
+  <div class="letter">
+    My love,<br><br>
+    Happy Birthday ❤️<br><br>
+    Every photo here is a reminder of how lucky I am.
+    You make my world brighter every single day.
+    I love you more than words can ever explain.
   </div>
-
-  <!-- FINAL PANEL -->
-  <div class="panel">
-    <div class="grid">
-      <img src="photo2.jpeg">
-      <img src="photo3.jpeg">
-      <img src="photo4.jpeg">
-      <img src="photo5.jpeg">
-    </div>
-
-    <div class="letter">
-      My love,<br><br>
-      Happy Birthday ❤️<br><br>
-      Every photo here is a reminder of how lucky I am.
-      You make my world brighter every single day.
-      I love you more than words can ever explain.
-    </div>
-  </div>
+</div>
 
 </div>
 
@@ -178,55 +169,67 @@ let current = 0;
 const panels = document.querySelectorAll(".panel");
 const openScreen = document.getElementById("openScreen");
 const content = document.getElementById("content");
-let balloonsStarted = false;
 
 openScreen.addEventListener("click", () => {
   openScreen.style.display = "none";
   content.style.display = "block";
+  frogsFall();
 });
 
-/* NEXT PANEL */
-function nextPanel() {
+/* NAVIGATION */
+function nextPanel(){
   panels[current].classList.remove("active");
   current++;
   panels[current].classList.add("active");
 
-  if (current === panels.length - 1 && !balloonsStarted) {
-    balloonsStarted = true;
-    startBalloons();
+  if(current === 1){
+    strawberriesFall();
+  }
+
+  if(current === 2){
+    balloonsFloat();
   }
 }
 
-/* PASTEL COLORS */
-const pastelColors = [
-  "#FFD1DC", // pastel pink
-  "#C1E1C1", // pastel green
-  "#B5D8FF", // pastel blue
-  "#FFF4B5", // pastel yellow
-  "#E0BBE4", // pastel purple
-  "#FFDAC1"  // peach
-];
+/* OPTIMIZED FALLING GENERATOR */
+function createFalling(emoji, count){
+  for(let i=0;i<count;i++){
+    const item = document.createElement("div");
+    item.className="fallItem";
+    item.textContent=emoji;
+    item.style.left=Math.random()*100+"vw";
+    item.style.fontSize=(20+Math.random()*20)+"px";
+    item.style.animationDuration=(4+Math.random()*3)+"s";
+    item.style.animationDelay=(Math.random()*2)+"s";
+    document.body.appendChild(item);
 
-/* SLOW FLOATING BALLOONS */
-function startBalloons() {
-  setInterval(() => {
-    const balloon = document.createElement("div");
-    balloon.classList.add("balloon");
-    balloon.textContent = "🎈";
+    setTimeout(()=>item.remove(),8000);
+  }
+}
 
-    const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
-    balloon.style.color = randomColor;
+function frogsFall(){
+  createFalling("🐸", 25);   // controlled amount for performance
+}
 
-    balloon.style.left = Math.random() * 100 + "vw";
-    balloon.style.fontSize = (28 + Math.random() * 18) + "px";
-    balloon.style.animationDuration = (9 + Math.random() * 6) + "s";
+function strawberriesFall(){
+  createFalling("🍓", 25);
+}
 
-    document.body.appendChild(balloon);
+/* FLOAT BALLOONS */
+function balloonsFloat(){
+  const pastel = ["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
+  for(let i=0;i<18;i++){
+    const b=document.createElement("div");
+    b.className="balloon";
+    b.textContent="🎈";
+    b.style.left=Math.random()*100+"vw";
+    b.style.fontSize=(28+Math.random()*18)+"px";
+    b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
+    b.style.animationDuration=(8+Math.random()*5)+"s";
+    document.body.appendChild(b);
 
-    setTimeout(() => {
-      balloon.remove();
-    }, 15000);
-  }, 1200);
+    setTimeout(()=>b.remove(),13000);
+  }
 }
 </script>
 
