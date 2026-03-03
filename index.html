@@ -15,29 +15,32 @@ body {
   background: white;
 }
 
-/* Opening screen */
+/* Opening Screen */
 #startScreen {
   position: fixed;
   inset: 0;
   background: linear-gradient(135deg, #a8e063, #56ab2f);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   z-index: 100;
+  cursor: pointer;
+  transition: opacity .4s ease;
 }
 
 #startScreen h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: white;
+  margin-top: 20px;
 }
 
 .envelope {
-  width: 90px;
-  height: 60px;
+  width: 80px;
+  height: 55px;
   background: white;
-  border-radius: 8px;
+  border-radius: 6px;
   position: relative;
 }
 
@@ -46,9 +49,9 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  border-left: 45px solid transparent;
-  border-right: 45px solid transparent;
-  border-top: 30px solid #e0e0e0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-top: 28px solid #e0e0e0;
 }
 
 /* Main content */
@@ -56,79 +59,98 @@ body {
   display: none;
 }
 
-/* Full viewport pyramid grid */
+/* Collage */
 .collage {
   display: grid;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 10% 20% 30% 20% 10%;
-  gap: 0px;
+  grid-template-rows: 12vh 20vh 30vh 20vh 12vh;
+  gap: 6px;
+  padding: 6px;
+  box-sizing: border-box;
 }
 
 .collage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 0px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-/* Photo positions */
+/* Pyramid Layout */
 .photo1 { grid-column: 1 / span 2; grid-row: 1; }
-.photo2 { grid-column: 1;        grid-row: 2; }
-.photo3 { grid-column: 2;        grid-row: 2; }
-.photo7 { grid-column: 1 / span 2; grid-row: 3; } /* center large */
-.photo4 { grid-column: 1;        grid-row: 4; }
-.photo5 { grid-column: 2;        grid-row: 4; }
+.photo2 { grid-column: 1; grid-row: 2; }
+.photo3 { grid-column: 2; grid-row: 2; }
+.photo7 { grid-column: 1 / span 2; grid-row: 3; }
+.photo4 { grid-column: 1; grid-row: 4; }
+.photo5 { grid-column: 2; grid-row: 4; }
 .photo6 { grid-column: 1 / span 2; grid-row: 5; }
 
 /* Letter */
 .letter {
-  max-width: 900px;
-  margin: 20px auto 80px auto;
+  width: 90%;
+  max-width: 800px;
+  margin: 40px auto 80px auto;
+  padding: 24px;
   font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  line-height: 1.8;
   font-weight: 600;
-  line-height: 1.7;
-  color: #1b4332;
-  padding: 22px;
-  background: linear-gradient(135deg, #c8f7c5, #56ab2f);
-  border-radius: 14px;
   text-align: center;
+  color: #1b4332;
+  background: linear-gradient(135deg, #c8f7c5, #56ab2f);
+  border-radius: 18px;
 }
 
-/* Frogs falling from top of *screen* */
+/* Falling frogs */
 .frog {
   position: fixed;
   width: 32px;
   height: 32px;
   background: url('https://i.imgur.com/gXaNddC.png') center/contain no-repeat;
   pointer-events: none;
-  z-index: 50;
+  z-index: 200;
 }
 
-/* Leaves falling from top of *screen* */
+/* Falling leaves */
 .leaf {
   position: fixed;
   width: 24px;
   height: 24px;
   background: url('https://i.imgur.com/46e8VzS.png') center/contain no-repeat;
   pointer-events: none;
-  opacity: 0.8;
-  z-index: 45;
+  opacity: .85;
+  z-index: 190;
 }
 
-/* Mobile stacking */
+/* Mobile improvements */
 @media (max-width: 600px) {
+
+  #startScreen h1 {
+    font-size: 2rem;
+  }
+
   .collage {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(7, 1fr);
+    grid-template-rows: repeat(7, 40vh);
+    gap: 8px;
+    padding: 8px;
   }
-  .photo1, .photo7, .photo6 {
+
+  .photo1,
+  .photo2,
+  .photo3,
+  .photo4,
+  .photo5,
+  .photo6,
+  .photo7 {
     grid-column: 1;
   }
-  .photo2, .photo3, .photo4, .photo5 {
-    grid-column: 1;
+
+  .letter {
+    font-size: 1.15rem;
   }
 }
 </style>
@@ -145,10 +167,10 @@ body {
     <img src="photo1.jpeg" class="photo1">
     <img src="photo2.jpeg" class="photo2">
     <img src="photo3.jpeg" class="photo3">
+    <img src="photo7.jpeg" class="photo7">
     <img src="photo4.jpeg" class="photo4">
     <img src="photo5.jpeg" class="photo5">
     <img src="photo6.jpeg" class="photo6">
-    <img src="photo7.jpeg" class="photo7">
   </div>
 
   <div class="letter">
@@ -164,59 +186,69 @@ body {
 const startScreen = document.getElementById("startScreen");
 const mainContent = document.getElementById("mainContent");
 
-startScreen.addEventListener("click", () => {
-  startScreen.style.display = "none";
-  mainContent.style.display = "block";
-
-  createFrogs();
-  createLeaves();
-});
-
-/* Frogs falling from *top of screen* */
-function createFrogs() {
-  const count = window.innerWidth < 600 ? 25 : 60;
-  for (let i = 0; i < count; i++) {
-    spawnFrog(Math.random() * window.innerWidth, -80);
-  }
-
-  function spawnFrog(x, y) {
-    const frog = document.createElement("div");
-    frog.classList.add("frog");
-    frog.x = x;
-    frog.y = y;
-    frog.vx = (Math.random() - 0.5) * 1.5;
-    frog.vy = 1 + Math.random() * 1.8;
-    document.body.appendChild(frog);
-
-    function animate() {
-      frog.y += frog.vy;
-      frog.x += frog.vx;
-      frog.style.transform = `translate(${frog.x}px, ${frog.y}px)`;
-      if (frog.y < window.innerHeight + 50) requestAnimationFrame(animate);
-    }
-    animate();
-  }
+/* Faster open for iPhone */
+function openSite() {
+  startScreen.style.opacity = "0";
+  setTimeout(() => {
+    startScreen.style.display = "none";
+    mainContent.style.display = "block";
+    startAnimations();
+  }, 300);
 }
 
-/* Leaves falling from *top of screen* */
-function createLeaves() {
-  const count = window.innerWidth < 600 ? 12 : 18;
-  for (let i = 0; i < count; i++) {
-    const leaf = document.createElement("div");
-    leaf.classList.add("leaf");
-    leaf.x = Math.random() * window.innerWidth;
-    leaf.y = -60;
-    leaf.speed = 0.3 + Math.random() * 0.8;
-    document.body.appendChild(leaf);
+startScreen.addEventListener("click", openSite);
+startScreen.addEventListener("touchstart", openSite);
 
-    function animateLeaf() {
-      leaf.y += leaf.speed;
-      leaf.x += Math.sin(leaf.y * 0.01) * 1.2;
-      leaf.style.transform = `translate(${leaf.x}px, ${leaf.y}px)`;
-      if (leaf.y < window.innerHeight + 60) requestAnimationFrame(animateLeaf);
+/* Continuous falling animation */
+function startAnimations() {
+  setInterval(() => spawnFrog(), 300);
+  setInterval(() => spawnLeaf(), 600);
+}
+
+function spawnFrog() {
+  const frog = document.createElement("div");
+  frog.className = "frog";
+  frog.style.left = Math.random() * window.innerWidth + "px";
+  frog.style.top = "-40px";
+  document.body.appendChild(frog);
+
+  let y = -40;
+  let xDrift = (Math.random() - 0.5) * 2;
+
+  function fall() {
+    y += 2 + Math.random();
+    frog.style.top = y + "px";
+    frog.style.left = parseFloat(frog.style.left) + xDrift + "px";
+    if (y < window.innerHeight + 40) {
+      requestAnimationFrame(fall);
+    } else {
+      frog.remove();
     }
-    animateLeaf();
   }
+  fall();
+}
+
+function spawnLeaf() {
+  const leaf = document.createElement("div");
+  leaf.className = "leaf";
+  leaf.style.left = Math.random() * window.innerWidth + "px";
+  leaf.style.top = "-40px";
+  document.body.appendChild(leaf);
+
+  let y = -40;
+
+  function fall() {
+    y += 1.2;
+    leaf.style.top = y + "px";
+    leaf.style.left =
+      parseFloat(leaf.style.left) + Math.sin(y * 0.02) * 2 + "px";
+    if (y < window.innerHeight + 40) {
+      requestAnimationFrame(fall);
+    } else {
+      leaf.remove();
+    }
+  }
+  fall();
 }
 </script>
 
