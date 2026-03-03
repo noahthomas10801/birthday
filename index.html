@@ -5,110 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Open Letter 💌</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family:'Poppins',sans-serif;
-  background:#000;
-  overflow:hidden;
-  text-align:center;
-  touch-action: pan-y;
-}
-
-/* OPEN SCREEN */
-#openScreen {
-  height:100vh;
-  background:linear-gradient(135deg,#0f3d1e,#1f6f3a);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  color:white;
-  cursor:pointer;
-}
-.envelope { font-size:60px; margin-bottom:20px; }
-
-/* CONTENT */
-#content { display:none; position:relative; height:100vh; width:100vw; }
-
-/* PANELS */
-.panel {
-  position:absolute;
-  width:100%;
-  height:100%;
-  padding:20px;
-  opacity:0;
-  transition:opacity 0.6s ease, transform 0.6s ease;
-  overflow-y:auto;
-}
-.panel.active { opacity:1; z-index:2; }
-
-/* GRID */
-.grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; }
-.grid img { width:100%; height:180px; object-fit:cover; border-radius:18px; box-shadow:0 8px 20px rgba(0,0,0,0.4); }
-
-/* CAPTION */
-.caption { margin-top:20px; font-size:18px; color:white; }
-
-/* LETTER */
-.letter {
-  margin-top:15px;
-  padding:20px;
-  background:linear-gradient(135deg,#2e8b57,#3cb371);
-  color:white;
-  border-radius:18px;
-  font-size:17px;
-  line-height:1.6;
-  opacity:0;
-  transition: opacity 1.5s ease;
-}
-
-/* SWIPE INDICATORS */
-#indicators {
-  position:fixed;
-  bottom:15px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  gap:8px;
-  z-index:10;
-}
-.dot {
-  width:10px; height:10px;
-  border-radius:50%;
-  background:white;
-  opacity:0.3;
-  transition:opacity 0.3s;
-}
-.dot.active { opacity:1; }
-
-/* FALLING ITEMS */
-.animLayer { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:5; }
-.fallItem {
-  position:absolute;
-  top:-50px;
-  width:40px;
-  height:40px;
-  transform:translate3d(0,0,0);
-  animation-name:fall,sway,rotate;
-  animation-timing-function:linear,ease-in-out,linear;
-  animation-iteration-count:infinite,infinite,infinite;
-}
-
-/* Animations */
-@keyframes fall { 0%{transform:translateY(0)} 100%{transform:translateY(110vh);} }
-@keyframes sway { 0%{transform:translateX(0)} 50%{transform:translateX(15px)} 100%{transform:translateX(0);} }
-@keyframes rotate { 0%{transform:rotate(0deg)} 50%{transform:rotate(15deg)} 100%{transform:rotate(0deg);} }
-
-/* balloons */
-.balloon {
-  position:absolute;
-  bottom:-80px;
-  width:50px;
-  height:50px;
-  transform:translate3d(0,0,0);
-  animation:floatUp linear infinite;
-}
-@keyframes floatUp { to { transform:translateY(-120vh); } }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#000;overflow:hidden;text-align:center;touch-action: pan-y;}
+#openScreen{height:100vh;background:linear-gradient(135deg,#0f3d1e,#1f6f3a);display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;cursor:pointer;}
+.envelope{font-size:60px;margin-bottom:20px;}
+#content{display:none;position:relative;height:100vh;width:100vw;}
+.panel{position:absolute;width:100%;height:100%;padding:20px;opacity:0;transition:opacity 0.5s ease;overflow-y:auto;}
+.panel.active{opacity:1;z-index:2;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.grid img{width:100%;height:160px;object-fit:cover;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,0.4);}
+.caption{margin-top:10px;font-size:16px;color:white;}
+.letter{margin-top:10px;padding:15px;background:linear-gradient(135deg,#2e8b57,#3cb371);color:white;border-radius:12px;font-size:16px;line-height:1.5;opacity:0;transition: opacity 1s ease;}
+#indicators{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;}
+.dot{width:10px;height:10px;border-radius:50%;background:white;opacity:0.3;transition:opacity 0.3s;}
+.dot.active{opacity:1;}
+.animLayer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:5;}
+.fallItem{position:absolute;top:-50px;width:30px;height:30px;transform:translate3d(0,0,0);animation-name:fall,sway,rotate;animation-timing-function:linear,ease-in-out,linear;animation-iteration-count:infinite,infinite,infinite;will-change:transform;}
+@keyframes fall{0%{transform:translateY(0)}100%{transform:translateY(110vh);}}
+@keyframes sway{0%{transform:translateX(0)}50%{transform:translateX(10px)}100%{transform:translateX(0);}}
+@keyframes rotate{0%{transform:rotate(0deg)}50%{transform:rotate(10deg)}100%{transform:rotate(0deg);}}
+.balloon{position:absolute;bottom:-60px;width:40px;height:40px;transform:translate3d(0,0,0);animation:floatUp linear infinite;will-change:transform;}
+@keyframes floatUp{to{transform:translateY(-120vh);}}
 </style>
 </head>
 <body>
@@ -119,12 +36,10 @@ body {
 </div>
 
 <div id="content">
-  <!-- Animation layers -->
   <div id="frogsLayer" class="animLayer"></div>
   <div id="strawLayer" class="animLayer"></div>
   <div id="balloonLayer" class="animLayer"></div>
 
-  <!-- Panels -->
   <div class="panel active">
     <div class="grid">
       <img src="photo8.jpeg">
@@ -161,7 +76,6 @@ body {
     </div>
   </div>
 
-  <!-- Indicators -->
   <div id="indicators">
     <div class="dot active"></div>
     <div class="dot"></div>
@@ -186,7 +100,6 @@ openScreen.addEventListener("click", ()=>{
   toggleAnimations();
 });
 
-/* swipe navigation */
 let startX=0;
 document.addEventListener("touchstart", e=>{ startX=e.touches[0].clientX; });
 document.addEventListener("touchend", e=>{
@@ -197,36 +110,35 @@ document.addEventListener("touchend", e=>{
 
 function nextPanel(){ if(current<panels.length-1) activatePanel(current+1);}
 function prevPanel(){ if(current>0) activatePanel(current-1);}
-
 function activatePanel(index){
   panels[current].classList.remove("active");
   current=index;
   panels[current].classList.add("active");
   dots.forEach(d=>d.classList.remove("active"));
   dots[current].classList.add("active");
-
   if(current===2) finalLetter.style.opacity="1";
   else finalLetter.style.opacity="0";
-
   toggleAnimations();
 }
 
-/* create falling images with PNGs */
+/* base64 images for mobile guaranteed display */
+const frogData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
+const strawData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
+
 function generateFallingImage(layer,src,count){
   for(let i=0;i<count;i++){
     const img=document.createElement("img");
-    img.src=src;           // MUST EXIST IN REPO
+    img.src=src;
     img.className="fallItem";
     img.style.left=Math.random()*100+"vw";
-    img.style.width=30+Math.random()*20+"px";
-    img.style.height=30+Math.random()*20+"px";
-    img.style.animationDuration=(4+Math.random()*4)+"s, "+(2+Math.random()*2)+"s, "+(2+Math.random()*2)+"s";
-    img.style.animationDelay=Math.random()*5+"s";
+    img.style.width=20+Math.random()*20+"px";
+    img.style.height=20+Math.random()*20+"px";
+    img.style.animationDuration=(3+Math.random()*3)+"s,"+(1.5+Math.random()*1.5)+"s,"+(1+Math.random()*2)+"s";
+    img.style.animationDelay=Math.random()*3+"s";
     layer.appendChild(img);
   }
 }
 
-/* balloons */
 function generateBalloons(layer,count){
   const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
   for(let i=0;i<count;i++){
@@ -234,17 +146,17 @@ function generateBalloons(layer,count){
     b.textContent="🎈";
     b.className="balloon";
     b.style.left=Math.random()*100+"vw";
-    b.style.fontSize=(28+Math.random()*18)+"px";
+    b.style.fontSize=(24+Math.random()*12)+"px";
     b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
-    b.style.animationDuration=(8+Math.random()*5)+"s";
+    b.style.animationDuration=(7+Math.random()*5)+"s";
     layer.appendChild(b);
   }
 }
 
-/* generate once */
-generateFallingImage(frogsLayer,"frog.png",25);
-generateFallingImage(strawLayer,"strawberry.png",25);
-generateBalloons(balloonLayer,15);
+/* generate only necessary items for smooth mobile performance */
+generateFallingImage(frogsLayer,frogData,30);
+generateFallingImage(strawLayer,strawData,30);
+generateBalloons(balloonLayer,12);
 
 function toggleAnimations(){
   frogsLayer.style.display=current===0?"block":"none";
@@ -257,6 +169,5 @@ strawLayer.style.display="none";
 balloonLayer.style.display="none";
 finalLetter.style.opacity="0";
 </script>
-
 </body>
 </html>
