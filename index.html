@@ -4,39 +4,150 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Letter</title>
+
 <style>
-body,html{margin:0;padding:0;overflow:hidden;font-family:sans-serif;background:#000;}
-#openScreen{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;cursor:pointer;background:linear-gradient(135deg,#0f3d1e,#1f6f3a);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+  height:100%;
+  overflow:hidden;
+  font-family:sans-serif;
+  background:#000;
+}
+
+/* OPEN SCREEN */
+#openScreen{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  cursor:pointer;
+  background:linear-gradient(135deg,#0f3d1e,#1f6f3a);
+}
 .envelope{font-size:60px;margin-bottom:20px;}
-#content{display:none;position:relative;width:100vw;height:100vh;overflow:hidden;}
-.panel{position:absolute;width:100%;height:100%;opacity:0;transition:opacity 0.5s ease;}
-.panel.active{opacity:1;z-index:2;}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;}
-.grid img{width:100%;height:auto;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.5);}
-.caption{color:white;margin-top:8px;font-size:16px;text-align:center;}
-.letter{margin-top:10px;background:linear-gradient(135deg,#2e8b57,#3cb371);color:white;padding:15px;border-radius:12px;opacity:0;transition:opacity 1s ease;font-size:16px;line-height:1.5;}
-.animLayer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;}
-.fallItem{position:fixed;top:-50px;width:30px;height:30px;animation-name:fall,sway,rotate;animation-iteration-count:infinite;animation-timing-function:linear,ease-in-out,linear;will-change:transform;}
-@keyframes fall{0%{transform:translateY(0)}100%{transform:translateY(110vh);}}
-@keyframes sway{0%{transform:translateX(0)}50%{transform:translateX(10px)}100%{transform:translateX(0);}}
-@keyframes rotate{0%{transform:rotate(0deg)}50%{transform:rotate(10deg)}100%{transform:rotate(0deg);}}
-.balloon{position:fixed;bottom:-60px;font-size:40px;transform:translate3d(0,0,0);animation:floatUp linear infinite;will-change:transform;}
-@keyframes floatUp{to{transform:translateY(-120vh);}}
+.swipeHint{
+  position:absolute;
+  bottom:40px;
+  font-size:14px;
+  opacity:0.8;
+  animation:hintPulse 1.5s infinite;
+}
+@keyframes hintPulse{
+  0%,100%{opacity:0.5}
+  50%{opacity:1}
+}
+
+/* MAIN CONTENT */
+#content{
+  display:none;
+  position:relative;
+  width:100vw;
+  height:100vh;
+}
+
+/* PANELS */
+.panel{
+  position:absolute;
+  width:100%;
+  height:100%;
+  padding:12px;
+  opacity:0;
+  transition:opacity .5s ease;
+  overflow-y:auto;
+}
+.panel.active{
+  opacity:1;
+  z-index:2;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.grid img{
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 6px 16px rgba(0,0,0,0.5);
+}
+
+.caption{
+  text-align:center;
+  color:white;
+  margin-top:10px;
+  font-size:16px;
+}
+
+/* LETTER */
+.letter{
+  margin-top:12px;
+  padding:16px;
+  background:linear-gradient(135deg,#2e8b57,#3cb371);
+  color:white;
+  border-radius:14px;
+  font-size:16px;
+  line-height:1.5;
+  opacity:0;
+  transition:opacity 1s ease;
+}
+
+/* ANIMATION LAYER */
+.animLayer{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:9999;
+  overflow:hidden;
+}
+
+.fallItem{
+  position:fixed;
+  top:-60px;
+  will-change:transform;
+  animation:fall linear infinite;
+}
+
+@keyframes fall{
+  0%{transform:translate3d(0,0,0) rotate(0deg);}
+  100%{transform:translate3d(0,110vh,0) rotate(360deg);}
+}
+
+/* SWIPE INDICATOR */
+.swipeIndicator{
+  position:fixed;
+  right:15px;
+  bottom:20px;
+  color:white;
+  font-size:14px;
+  opacity:0.8;
+  animation:hintPulse 1.5s infinite;
+  z-index:10;
+}
 </style>
 </head>
+
 <body>
 
 <div id="openScreen">
   <div class="envelope">✉️</div>
-  <h1> 😈 Click for Virus 😈 </h1>
+  <h1>Click to Open</h1>
 </div>
 
 <div id="content">
+
   <div id="frogsLayer" class="animLayer"></div>
   <div id="strawLayer" class="animLayer"></div>
-  <div id="balloonLayer" class="animLayer"></div>
 
-  <!-- Panel 1: photos 8-11 -->
+  <div class="swipeIndicator">⬅ Swipe Left</div>
+
+  <!-- PANEL 1 -->
   <div class="panel active">
     <div class="grid">
       <img src="photo8.jpeg">
@@ -44,21 +155,21 @@ body,html{margin:0;padding:0;overflow:hidden;font-family:sans-serif;background:#
       <img src="photo10.jpeg">
       <img src="photo11.jpeg">
     </div>
-    <div class="caption"> ✨ My favorite pictures of you ✨</div>
+    <div class="caption">Our Memories ❤️</div>
   </div>
 
-  <!-- Panel 2: photos 12-15 -->
+  <!-- PANEL 2 -->
   <div class="panel">
     <div class="grid">
-      <img src="photo12.jpeg" style="justify-self:center; max-width:100%;">
+      <img src="photo12.jpeg">
       <img src="photo13.jpeg">
       <img src="photo14.jpeg">
       <img src="photo15.jpeg">
     </div>
-    <div class="caption"> Actual favs...damn you kinda badddd...</div>
+    <div class="caption">More Adventures ✨</div>
   </div>
 
-  <!-- Panel 3: photos 2-5 with letter -->
+  <!-- PANEL 3 -->
   <div class="panel">
     <div class="grid">
       <img src="photo2.jpeg">
@@ -67,94 +178,96 @@ body,html{margin:0;padding:0;overflow:hidden;font-family:sans-serif;background:#
       <img src="photo5.jpeg">
     </div>
     <div class="letter" id="finalLetter">
-     🎉 Happy Birthday Susan 🎉<br><br>
-      Kinda corny way to wish you but i got to test my website making skills (thanks ChatGPT, im actually writing this part ok).<br>
-      Thank you for entering my world and making it even more fun and enjoyable.<br>
-      I love you, hope you have a great birthday ❤️❤️
+      Happy Birthday ❤️<br><br>
+      Every memory with you is my favorite memory.
+      You make my world brighter every single day.
+      I love you endlessly.
     </div>
   </div>
+
 </div>
 
 <script>
-const openScreen = document.getElementById('openScreen');
-const content = document.getElementById('content');
-const panels = document.querySelectorAll('.panel');
-const finalLetter = document.getElementById('finalLetter');
-const frogsLayer = document.getElementById('frogsLayer');
-const strawLayer = document.getElementById('strawLayer');
-const balloonLayer = document.getElementById('balloonLayer');
+const openScreen = document.getElementById("openScreen");
+const content = document.getElementById("content");
+const panels = document.querySelectorAll(".panel");
+const finalLetter = document.getElementById("finalLetter");
+const frogsLayer = document.getElementById("frogsLayer");
+const strawLayer = document.getElementById("strawLayer");
+
 let current = 0;
 let startX = 0;
 
-// URLs for images
-const frogURL = "frog.png";          // local path
-const strawberryURL = "strawberry.png";  // local path
+/* LOCAL IMAGE FILES */
+const frogURL = "frog.png";
+const strawberryURL = "strawberry.png";
 
-// Generate falling items
-function generateFalling(layer, src, count) {
-  for (let i=0; i<count; i++) {
+/* Generate falling items */
+function generateFalling(layer, src, count){
+  layer.innerHTML = "";
+  for(let i=0;i<count;i++){
     const img = document.createElement("img");
     img.src = src;
     img.className = "fallItem";
-    img.style.left = Math.random()*100+"vw";
-    img.style.width = 20+Math.random()*20+"px";
-    img.style.height = 20+Math.random()*20+"px";
-    img.style.animationDuration = (4+Math.random()*4)+"s,"+(2+Math.random()*2)+"s,"+(1+Math.random()*2)+"s";
-    img.style.animationDelay = Math.random()*3+"s";
+    img.style.left = Math.random()*100 + "vw";
+    img.style.width = 25 + Math.random()*20 + "px";
+    img.style.animationDuration = 4 + Math.random()*4 + "s";
+    img.style.animationDelay = Math.random()*3 + "s";
     layer.appendChild(img);
   }
 }
 
-// Generate balloons/confetti
-function generateBalloons(layer, count){
-  const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
-  for (let i=0;i<count;i++){
-    const b=document.createElement("div");
-    b.textContent="🎈";
-    b.className="balloon";
-    b.style.left=Math.random()*100+"vw";
-    b.style.fontSize=(24+Math.random()*16)+"px";
-    b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
-    b.style.animationDuration=(7+Math.random()*5)+"s";
-    layer.appendChild(b);
+/* Open click */
+openScreen.addEventListener("click",()=>{
+  openScreen.style.display="none";
+  content.style.display="block";
+  generateFalling(frogsLayer, frogURL, 40);
+});
+
+/* Swipe */
+document.addEventListener("touchstart",e=>{
+  startX = e.touches[0].clientX;
+});
+document.addEventListener("touchend",e=>{
+  let endX = e.changedTouches[0].clientX;
+  if(startX - endX > 50) nextPanel();
+  if(endX - startX > 50) prevPanel();
+});
+
+function nextPanel(){
+  if(current < panels.length-1){
+    panels[current].classList.remove("active");
+    current++;
+    panels[current].classList.add("active");
+    updateAnimations();
+  }
+}
+function prevPanel(){
+  if(current > 0){
+    panels[current].classList.remove("active");
+    current--;
+    panels[current].classList.add("active");
+    updateAnimations();
   }
 }
 
-// Open click
-openScreen.addEventListener('click',()=>{
-  openScreen.style.display='none';
-  content.style.display='block';
-  frogsLayer.style.display='block';
-  generateFalling(frogsLayer,frogURL,30);
-});
+function updateAnimations(){
+  frogsLayer.innerHTML="";
+  strawLayer.innerHTML="";
 
-// Swipe navigation
-document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-document.addEventListener('touchend',e=>{
-  let endX=e.changedTouches[0].clientX;
-  if(startX-endX>50) nextPanel();
-  if(endX-startX>50) prevPanel();
-});
-
-function nextPanel(){ if(current<panels.length-1) activatePanel(current+1);}
-function prevPanel(){ if(current>0) activatePanel(current-1);}
-
-function activatePanel(index){
-  panels[current].classList.remove('active');
-  current=index;
-  panels[current].classList.add('active');
-
-  frogsLayer.style.display = (current===0)?'block':'none';
-  strawLayer.style.display = (current===1)?'block':'none';
-  balloonLayer.style.display = (current===2)?'block':'none';
-
-  if(current===1 && strawLayer.childElementCount===0) generateFalling(strawLayer,strawberryURL,30);
-  if(current===2 && balloonLayer.childElementCount===0) generateBalloons(balloonLayer,12);
-
-  finalLetter.style.opacity = (current===2)?1:0;
+  if(current === 0){
+    generateFalling(frogsLayer, frogURL, 40);
+  }
+  if(current === 1){
+    generateFalling(strawLayer, strawberryURL, 40);
+  }
+  if(current === 2){
+    finalLetter.style.opacity=1;
+  } else {
+    finalLetter.style.opacity=0;
+  }
 }
 </script>
+
 </body>
 </html>
-
-
