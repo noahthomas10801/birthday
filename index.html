@@ -26,17 +26,6 @@ html,body{
   background:linear-gradient(135deg,#0f3d1e,#1f6f3a);
 }
 .envelope{font-size:60px;margin-bottom:20px;}
-.swipeHint{
-  position:absolute;
-  bottom:40px;
-  font-size:14px;
-  opacity:0.8;
-  animation:hintPulse 1.5s infinite;
-}
-@keyframes hintPulse{
-  0%,100%{opacity:0.5}
-  50%{opacity:1}
-}
 
 /* MAIN CONTENT */
 #content{
@@ -95,7 +84,7 @@ html,body{
   transition:opacity 1s ease;
 }
 
-/* ANIMATION LAYER */
+/* ANIMATION LAYERS */
 .animLayer{
   position:fixed;
   top:0;
@@ -107,6 +96,7 @@ html,body{
   overflow:hidden;
 }
 
+/* Falling (frogs + strawberries) */
 .fallItem{
   position:fixed;
   top:-60px;
@@ -119,6 +109,19 @@ html,body{
   100%{transform:translate3d(0,110vh,0) rotate(360deg);}
 }
 
+/* Balloon float */
+.floatItem{
+  position:fixed;
+  bottom:-80px;
+  will-change:transform;
+  animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+  0%{transform:translate3d(0,0,0);}
+  100%{transform:translate3d(0,-120vh,0);}
+}
+
 /* SWIPE INDICATOR */
 .swipeIndicator{
   position:fixed;
@@ -127,8 +130,13 @@ html,body{
   color:white;
   font-size:14px;
   opacity:0.8;
-  animation:hintPulse 1.5s infinite;
+  animation:pulse 1.5s infinite;
   z-index:10;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:0.4}
+  50%{opacity:1}
 }
 </style>
 </head>
@@ -144,8 +152,9 @@ html,body{
 
   <div id="frogsLayer" class="animLayer"></div>
   <div id="strawLayer" class="animLayer"></div>
+  <div id="balloonLayer" class="animLayer"></div>
 
-  <div class="swipeIndicator">⬅ Swipe Left</div>
+  <div id="swipeHint" class="swipeIndicator">⬅ Swipe Left</div>
 
   <!-- PANEL 1 -->
   <div class="panel active">
@@ -194,25 +203,43 @@ const panels = document.querySelectorAll(".panel");
 const finalLetter = document.getElementById("finalLetter");
 const frogsLayer = document.getElementById("frogsLayer");
 const strawLayer = document.getElementById("strawLayer");
+const balloonLayer = document.getElementById("balloonLayer");
+const swipeHint = document.getElementById("swipeHint");
 
 let current = 0;
 let startX = 0;
 
-/* LOCAL IMAGE FILES */
+/* LOCAL FILES */
 const frogURL = "frog.png";
 const strawberryURL = "strawberry.png";
+const balloonURL = "balloon.png";
 
 /* Generate falling items */
 function generateFalling(layer, src, count){
-  layer.innerHTML = "";
+  layer.innerHTML="";
   for(let i=0;i<count;i++){
-    const img = document.createElement("img");
-    img.src = src;
-    img.className = "fallItem";
-    img.style.left = Math.random()*100 + "vw";
-    img.style.width = 25 + Math.random()*20 + "px";
-    img.style.animationDuration = 4 + Math.random()*4 + "s";
-    img.style.animationDelay = Math.random()*3 + "s";
+    const img=document.createElement("img");
+    img.src=src;
+    img.className="fallItem";
+    img.style.left=Math.random()*100+"vw";
+    img.style.width=25+Math.random()*20+"px";
+    img.style.animationDuration=4+Math.random()*4+"s";
+    img.style.animationDelay=Math.random()*3+"s";
+    layer.appendChild(img);
+  }
+}
+
+/* Generate floating balloons */
+function generateBalloons(layer, count){
+  layer.innerHTML="";
+  for(let i=0;i<count;i++){
+    const img=document.createElement("img");
+    img.src=balloonURL;
+    img.className="floatItem";
+    img.style.left=Math.random()*100+"vw";
+    img.style.width=40+Math.random()*30+"px";
+    img.style.animationDuration=6+Math.random()*5+"s";
+    img.style.animationDelay=Math.random()*3+"s";
     layer.appendChild(img);
   }
 }
@@ -226,46 +253,51 @@ openScreen.addEventListener("click",()=>{
 
 /* Swipe */
 document.addEventListener("touchstart",e=>{
-  startX = e.touches[0].clientX;
+  startX=e.touches[0].clientX;
 });
 document.addEventListener("touchend",e=>{
-  let endX = e.changedTouches[0].clientX;
-  if(startX - endX > 50) nextPanel();
-  if(endX - startX > 50) prevPanel();
+  let endX=e.changedTouches[0].clientX;
+  if(startX-endX>50) nextPanel();
+  if(endX-startX>50) prevPanel();
 });
 
 function nextPanel(){
-  if(current < panels.length-1){
+  if(current<panels.length-1){
     panels[current].classList.remove("active");
     current++;
     panels[current].classList.add("active");
-    updateAnimations();
+    updatePanel();
   }
 }
 function prevPanel(){
-  if(current > 0){
+  if(current>0){
     panels[current].classList.remove("active");
     current--;
     panels[current].classList.add("active");
-    updateAnimations();
+    updatePanel();
   }
 }
 
-function updateAnimations(){
+function updatePanel(){
   frogsLayer.innerHTML="";
   strawLayer.innerHTML="";
+  balloonLayer.innerHTML="";
 
-  if(current === 0){
-    generateFalling(frogsLayer, frogURL, 40);
+  if(current===0){
+    generateFalling(frogsLayer,frogURL,40);
   }
-  if(current === 1){
-    generateFalling(strawLayer, strawberryURL, 40);
+  if(current===1){
+    generateFalling(strawLayer,strawberryURL,40);
   }
-  if(current === 2){
+  if(current===2){
     finalLetter.style.opacity=1;
+    generateBalloons(balloonLayer,15);
   } else {
     finalLetter.style.opacity=0;
   }
+
+  /* Hide swipe on last panel */
+  swipeHint.style.display = (current === panels.length-1) ? "none" : "block";
 }
 </script>
 
