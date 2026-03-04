@@ -3,29 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Open Letter 💌</title>
+<title>Birthday Letter</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Poppins',sans-serif;background:#000;overflow:hidden;text-align:center;touch-action: pan-y;}
-#openScreen{height:100vh;background:linear-gradient(135deg,#0f3d1e,#1f6f3a);display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;cursor:pointer;}
+body,html{margin:0;padding:0;overflow:hidden;font-family:sans-serif;background:#000;}
+#openScreen{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;cursor:pointer;background:linear-gradient(135deg,#0f3d1e,#1f6f3a);}
 .envelope{font-size:60px;margin-bottom:20px;}
-#content{display:none;position:relative;height:100vh;width:100vw;}
-.panel{position:absolute;width:100%;height:100%;padding:20px;opacity:0;transition:opacity 0.5s ease;overflow-y:auto;}
+#content{display:none;position:relative;width:100vw;height:100vh;overflow:hidden;}
+.panel{position:absolute;width:100%;height:100%;opacity:0;transition:opacity 0.5s ease;}
 .panel.active{opacity:1;z-index:2;}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.grid img{width:100%;height:160px;object-fit:cover;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,0.4);}
-.caption{margin-top:10px;font-size:16px;color:white;}
-.letter{margin-top:10px;padding:15px;background:linear-gradient(135deg,#2e8b57,#3cb371);color:white;border-radius:12px;font-size:16px;line-height:1.5;opacity:0;transition: opacity 1s ease;}
-#indicators{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10;}
-.dot{width:10px;height:10px;border-radius:50%;background:white;opacity:0.3;transition:opacity 0.3s;}
-.dot.active{opacity:1;}
-.animLayer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:5;}
-.fallItem{position:absolute;top:-50px;width:30px;height:30px;transform:translate3d(0,0,0);animation-name:fall,sway,rotate;animation-timing-function:linear,ease-in-out,linear;animation-iteration-count:infinite,infinite,infinite;will-change:transform;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:12px;}
+.grid img{width:100%;height:auto;object-fit:cover;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+.caption{color:white;margin-top:8px;font-size:16px;text-align:center;}
+.letter{margin-top:10px;background:linear-gradient(135deg,#2e8b57,#3cb371);color:white;padding:15px;border-radius:12px;opacity:0;transition:opacity 1s ease;font-size:16px;line-height:1.5;}
+.animLayer{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden;}
+.fallItem{position:fixed;top:-50px;width:30px;height:30px;animation-name:fall,sway,rotate;animation-iteration-count:infinite;animation-timing-function:linear,ease-in-out,linear;will-change:transform;}
 @keyframes fall{0%{transform:translateY(0)}100%{transform:translateY(110vh);}}
 @keyframes sway{0%{transform:translateX(0)}50%{transform:translateX(10px)}100%{transform:translateX(0);}}
 @keyframes rotate{0%{transform:rotate(0deg)}50%{transform:rotate(10deg)}100%{transform:rotate(0deg);}}
-.balloon{position:absolute;bottom:-60px;width:40px;height:40px;transform:translate3d(0,0,0);animation:floatUp linear infinite;will-change:transform;}
-@keyframes floatUp{to{transform:translateY(-120vh);}}
 </style>
 </head>
 <body>
@@ -38,8 +32,8 @@ body{font-family:'Poppins',sans-serif;background:#000;overflow:hidden;text-align
 <div id="content">
   <div id="frogsLayer" class="animLayer"></div>
   <div id="strawLayer" class="animLayer"></div>
-  <div id="balloonLayer" class="animLayer"></div>
 
+  <!-- Panel 1: photos 8-11 with frogs -->
   <div class="panel active">
     <div class="grid">
       <img src="photo8.jpeg">
@@ -47,19 +41,21 @@ body{font-family:'Poppins',sans-serif;background:#000;overflow:hidden;text-align
       <img src="photo10.jpeg">
       <img src="photo11.jpeg">
     </div>
-    <div class="caption">Our beautiful memories ❤️</div>
+    <div class="caption">Our memories ❤️</div>
   </div>
 
+  <!-- Panel 2: photos 12-15 with strawberries -->
   <div class="panel">
     <div class="grid">
-      <img src="photo12.jpeg">
+      <img src="photo12.jpeg" style="justify-self:center; max-width:100%;">
       <img src="photo13.jpeg">
       <img src="photo14.jpeg">
       <img src="photo15.jpeg">
     </div>
-    <div class="caption">More adventures together ✨</div>
+    <div class="caption">More adventures ✨</div>
   </div>
 
+  <!-- Panel 3: photos 2-5 with letter -->
   <div class="panel">
     <div class="grid">
       <img src="photo2.jpeg">
@@ -68,41 +64,54 @@ body{font-family:'Poppins',sans-serif;background:#000;overflow:hidden;text-align
       <img src="photo5.jpeg">
     </div>
     <div class="letter" id="finalLetter">
-      My love,<br><br>
       Happy Birthday ❤️<br><br>
-      Every photo here is a reminder of how lucky I am.
-      You make my world brighter every single day.
-      I love you more than words can ever explain.
+      All these photos remind me how lucky I am.<br>
+      You make my world brighter every day.<br>
+      I love you more than words can explain.
     </div>
-  </div>
-
-  <div id="indicators">
-    <div class="dot active"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
   </div>
 </div>
 
 <script>
-let current=0;
-const panels=document.querySelectorAll(".panel");
-const openScreen=document.getElementById("openScreen");
-const content=document.getElementById("content");
-const dots=document.querySelectorAll(".dot");
-const frogsLayer=document.getElementById("frogsLayer");
-const strawLayer=document.getElementById("strawLayer");
-const balloonLayer=document.getElementById("balloonLayer");
-const finalLetter=document.getElementById("finalLetter");
+const openScreen = document.getElementById('openScreen');
+const content = document.getElementById('content');
+const panels = document.querySelectorAll('.panel');
+const finalLetter = document.getElementById('finalLetter');
+const frogsLayer = document.getElementById('frogsLayer');
+const strawLayer = document.getElementById('strawLayer');
+let current = 0;
+let startX=0;
 
-openScreen.addEventListener("click", ()=>{
-  openScreen.style.display="none";
-  content.style.display="block";
-  toggleAnimations();
+// Base64 images for mobile
+const frogData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
+const strawData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
+
+// Generate falling items
+function generateFalling(layer,src,count){
+  for(let i=0;i<count;i++){
+    let img=document.createElement('img');
+    img.src=src;
+    img.className='fallItem';
+    img.style.left=Math.random()*100+'vw';
+    img.style.width=20+Math.random()*15+'px';
+    img.style.height=20+Math.random()*15+'px';
+    img.style.animationDuration=(4+Math.random()*4)+'s,'+(2+Math.random()*2)+'s,'+(1+Math.random()*2)+'s';
+    img.style.animationDelay=Math.random()*3+'s';
+    layer.appendChild(img);
+  }
+}
+
+// Initial open click
+openScreen.addEventListener('click', ()=>{
+  openScreen.style.display='none';
+  content.style.display='block';
+  frogsLayer.style.display='block';
+  generateFalling(frogsLayer,frogData,30);
 });
 
-let startX=0;
-document.addEventListener("touchstart", e=>{ startX=e.touches[0].clientX; });
-document.addEventListener("touchend", e=>{
+// Swipe handling
+document.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; });
+document.addEventListener('touchend', e=>{
   let endX=e.changedTouches[0].clientX;
   if(startX-endX>50) nextPanel();
   if(endX-startX>50) prevPanel();
@@ -111,63 +120,21 @@ document.addEventListener("touchend", e=>{
 function nextPanel(){ if(current<panels.length-1) activatePanel(current+1);}
 function prevPanel(){ if(current>0) activatePanel(current-1);}
 function activatePanel(index){
-  panels[current].classList.remove("active");
+  panels[current].classList.remove('active');
   current=index;
-  panels[current].classList.add("active");
-  dots.forEach(d=>d.classList.remove("active"));
-  dots[current].classList.add("active");
-  if(current===2) finalLetter.style.opacity="1";
-  else finalLetter.style.opacity="0";
-  toggleAnimations();
-}
+  panels[current].classList.add('active');
 
-/* base64 images for mobile guaranteed display */
-const frogData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
-const strawData="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAA...";
+  // Panel 1 = frogs, Panel 2 = strawberries
+  frogsLayer.style.display = (current===0)?'block':'none';
+  strawLayer.style.display = (current===1)?'block':'none';
 
-function generateFallingImage(layer,src,count){
-  for(let i=0;i<count;i++){
-    const img=document.createElement("img");
-    img.src=src;
-    img.className="fallItem";
-    img.style.left=Math.random()*100+"vw";
-    img.style.width=20+Math.random()*20+"px";
-    img.style.height=20+Math.random()*20+"px";
-    img.style.animationDuration=(3+Math.random()*3)+"s,"+(1.5+Math.random()*1.5)+"s,"+(1+Math.random()*2)+"s";
-    img.style.animationDelay=Math.random()*3+"s";
-    layer.appendChild(img);
+  if(current===1 && strawLayer.childElementCount===0){
+    generateFalling(strawLayer,strawData,30);
   }
+
+  if(current===2) finalLetter.style.opacity=1;
+  else finalLetter.style.opacity=0;
 }
-
-function generateBalloons(layer,count){
-  const pastel=["#FFD1DC","#C1E1C1","#B5D8FF","#FFF4B5","#E0BBE4","#FFDAC1"];
-  for(let i=0;i<count;i++){
-    const b=document.createElement("div");
-    b.textContent="🎈";
-    b.className="balloon";
-    b.style.left=Math.random()*100+"vw";
-    b.style.fontSize=(24+Math.random()*12)+"px";
-    b.style.color=pastel[Math.floor(Math.random()*pastel.length)];
-    b.style.animationDuration=(7+Math.random()*5)+"s";
-    layer.appendChild(b);
-  }
-}
-
-/* generate only necessary items for smooth mobile performance */
-generateFallingImage(frogsLayer,frogData,30);
-generateFallingImage(strawLayer,strawData,30);
-generateBalloons(balloonLayer,12);
-
-function toggleAnimations(){
-  frogsLayer.style.display=current===0?"block":"none";
-  strawLayer.style.display=current===1?"block":"none";
-  balloonLayer.style.display=current===2?"block":"none";
-}
-
-frogsLayer.style.display="none";
-strawLayer.style.display="none";
-balloonLayer.style.display="none";
-finalLetter.style.opacity="0";
 </script>
 </body>
 </html>
